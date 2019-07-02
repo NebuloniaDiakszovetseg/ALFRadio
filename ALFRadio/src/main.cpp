@@ -5,10 +5,10 @@
 int main()
 {
 	sf::RenderWindow window;
-	window.create(sf::VideoMode(1366, 768), "My Application");
+	window.create(sf::VideoMode(1000, 600), "My Application");
 
 	NGin::Logger::setConsoleFont({ 18, 18 }, true);
-	NGin::Logger::setConsoleSize({ 1280, 600 });
+	NGin::Logger::setConsoleSize({ 800, 480 });
 
 	NGin::ResourceCodex::setLocation("assets/");
 	NGin::UI::Cursor::setBuffer(*NGin::ResourceCodex::Acquire<sf::SoundBuffer>("click.wav"));
