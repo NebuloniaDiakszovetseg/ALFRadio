@@ -66,6 +66,15 @@ namespace NGin::UI {
 	{
 		button.setSelectColor(color);
 	}
+	void Switcher::setisActive(const bool active)
+	{
+		isActive = active;
+		mark.setTextureRect({ int(2 * mark.getSize().x), 0, int(mark.getSize().x), int(mark.getSize().y) });
+	}
+	void Switcher::setInactivity(const bool inactive)
+	{
+		button.setInactivity(inactive);
+	}
 	bool Switcher::getisActive()
 	{
 		return isActive;

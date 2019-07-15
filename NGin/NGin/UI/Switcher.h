@@ -33,9 +33,14 @@ namespace NGin::UI {
 		void setButtonColor(const sf::Color& color);
 		// sets the color of the selection rectangle
 		void setSelectColor(const sf::Color& color);
+		// set isActive manually
+		void setisActive(const bool active);
+		// makes  object unable to act
+		void setInactivity(const bool inactive);
 
 		// returns true whether switcher is  active
 		bool getisActive();
+		sf::Vector2f getSize() const { return button.getSize(); }
 	private:
 		// this is the mark getting displayed over the button whenever switched on
 		sf::RectangleShape mark;

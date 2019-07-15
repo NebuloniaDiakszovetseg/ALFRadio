@@ -12,14 +12,18 @@ namespace NGin {
 		// Change font color based on severity
 		if (severity == Severity::Info) {
 			SetConsoleTextAttribute(consoleHandle, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-			std::cout << "INFO: ";
+			if (Timer::getSysMeasured()) std::cout << "(" << Timer::getSysTimeString() << ") ";
+			else std::cout << "INFO: ";
+		}
+		else if (severity == Severity::Warning) {
+			SetConsoleTextAttribute(consoleHandle, FOREGROUND_RED | FOREGROUND_GREEN);
+			if (Timer::getSysMeasured()) std::cout << "(" << Timer::getSysTimeString() << ") ";
+			else std::cout << "WARNING: ";
 		} else if (severity == Severity::Error) {
 			SetConsoleTextAttribute(consoleHandle, FOREGROUND_RED | FOREGROUND_INTENSITY);
-			std::cout << "ERROR! ";
-		} else if (severity == Severity::Warning) {
-			SetConsoleTextAttribute(consoleHandle, FOREGROUND_RED | FOREGROUND_GREEN);
-			std::cout << "WARNING: ";
-		}
+			if (Timer::getSysMeasured()) std::cout << "(" << Timer::getSysTimeString() << ") ";
+			else std::cout << "ERROR: ";
+		} 
 
 		std::cout << output << std::endl;
 
@@ -69,6 +73,10 @@ namespace NGin {
 			font.FontWeight = FW_NORMAL;
 
 		SetCurrentConsoleFontEx(consoleHandle, false, &font);
+	}
+	void Logger::setConsoleName(const LPCSTR name)
+	{
+		SetConsoleTitle(name);
 	}
 	WORD Logger::GetConsoleTextAttribute(HANDLE hCon)
 	{

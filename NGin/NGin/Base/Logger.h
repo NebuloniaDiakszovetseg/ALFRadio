@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML/System.hpp"
+#include "Timer.h"
 #include <vector>
 #include <windows.h> // <- only windows capable
 
@@ -26,6 +27,8 @@ namespace NGin
 		static void setConsoleSize(const sf::Vector2u &size);
 		// changes even fonts already displayed
 		static void setConsoleFont(const sf::Vector2i& size, const bool isBold = false);
+		// changes the name of the console
+		static void setConsoleName(const LPCSTR name);
 	private:
 		// handle of the console window
 		static HANDLE consoleHandle;

@@ -45,6 +45,9 @@
     <ClCompile Include="NGin\UI\Cursor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="NGin\Base\Timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="NGin\UI\Button.h">
@@ -87,6 +90,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="NGin\UI\UIElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NGin\Base\Timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

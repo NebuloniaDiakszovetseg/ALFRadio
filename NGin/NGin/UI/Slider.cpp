@@ -1,4 +1,5 @@
 #include "Slider.h"
+#include "../Base/Logger.h"
 #include "Cursor.h"
 
 namespace NGin::UI {
@@ -20,13 +21,14 @@ namespace NGin::UI {
 
 			isSelected = shape.getGlobalBounds().intersects(mouseRect);
 
-			// store mouse.x in slider level to avoid declaring another float
+			// store mouse.x
 			mouseX = mouse.x;
 		}
 	}
 	void Slider::handleEvents(const sf::Event& event)
 	{
 		if (!isInactive) {
+			hasChanged = false; // the level has not yet changed in this frame
 
 			if (isSelected) {
 				shape.setOutlineThickness(-outlineThickness);
@@ -55,6 +57,8 @@ namespace NGin::UI {
 				if (level > 1) level = 1;
 				else if (level < 0) level = 0;
 
+				hasChanged = true; // signal that the level has changed in this frame
+
 				adjustMarkPos();
 			}
 
@@ -68,6 +72,7 @@ namespace NGin::UI {
 				if (temp < 0) level = 0;
 				else level = temp;
 
+				hasChanged = true; // signal that the level has changed in this frame
 				adjustMarkPos();
 			}
 			else if (rightArrow.activated()) {
@@ -77,6 +82,7 @@ namespace NGin::UI {
 				if (temp > 1) level = 1;
 				else level = temp;
 
+				hasChanged = true; // signal that the level has changed in this frame
 				adjustMarkPos();
 			}
 		}
@@ -92,10 +98,10 @@ namespace NGin::UI {
 
 		shape.setTextureRect({ 2 * (int)leftArrow.getSize().x, 0, (int)shape.getSize().x, (int)shape.getSize().y });
 
-		rightArrow.setTexturePos({ int(2 * leftArrow.getSize().x + shape.getSize().x), 0 });
+		rightArrow.setTexturePos({ 2 * int(leftArrow.getSize().x) + int(shape.getSize().x), 0 });
 
 		mark.setTextureRect ({
-			int(shape.getSize().x + 2 * leftArrow.getSize().x + 2 * rightArrow.getSize().x), 0,
+			int(shape.getSize().x) + 2 * int(leftArrow.getSize().x) + 2 * int(rightArrow.getSize().x), 0,
 			(int)mark.getSize().x, (int)mark.getSize().y
 		});
 	}
@@ -132,9 +138,40 @@ namespace NGin::UI {
 		// put the mark where it should be
 		adjustMarkPos();
 	}
+	void Slider::setLevel(const float in_level)
+	{
+		// only if the level wasn't changed manually
+		if (!hasChanged) {
+
+			// check if the set level is valid
+			if (in_level > 1) {
+				Logger::logOnce("Element: " + std::to_string(Elemindex) +" Slider level set to: "
+					+ std::to_string(in_level) + " -> above 1(100%)!", Logger::Severity::Warning);
+			}
+			else if (in_level < 0) {
+				Logger::logOnce("Element: " + std::to_string(Elemindex) + " Slider level set to: "
+					+ std::to_string(in_level) + " -> below 0(0%)!", Logger::Severity::Warning);
+			}
+
+			// set level
+			level = in_level;
+			// adjust mark position to level
+			adjustMarkPos();
+		}
+
+		hasChanged = false;
+	}
 	float Slider::getLevel()
 	{
 		return level;
+	}
+	sf::Vector2f Slider::getSize()
+	{
+		return { leftArrow.getSize().x + shape.getSize().x + rightArrow.getSize().x, shape.getSize().y };
+	}
+	bool Slider::getHasChanged()
+	{
+		return hasChanged;
 	}
 	void Slider::adjustMarkPos()
 	{

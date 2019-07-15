@@ -52,9 +52,15 @@ namespace NGin::UI {
 		void setSliderBox(const sf::FloatRect& newbox);
 		// sets the position of the object (top-left pivot)
 		void setPosition(const sf::Vector2f& position);
+		// sets the level of the slider manually
+		void setLevel(const float in_level);
 
 		// gets the current level of the slider in a value between 0 and 1
 		float getLevel();
+		// gets the size of the entire object
+		sf::Vector2f getSize();
+		// gets a true whenever level changes
+		bool getHasChanged();
 	private:
 		// adjust button position based on level
 		void adjustMarkPos();
@@ -72,6 +78,6 @@ namespace NGin::UI {
 		bool isSliding = false; // true if lmb is on hold (then slider is active)
 		bool isInactive = false; // if true the object can't be selected or modified
 		bool isSelected = false; // used for the main section
-		bool isActive = false; // used for the main section
+		bool hasChanged = false; // signals to user wheter level has been changed compared to last time
 	};
 }
