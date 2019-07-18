@@ -20,7 +20,7 @@ namespace NGin::UI
 			text.setString(txt);
 			text.setCharacterSize(30);
 
-			centerTextInShape(text, shape);
+			centCentTxtInSh(text, shape);
 			textPos = text.getPosition();
 		}
 		Button() : Button(sf::Vector2f{ 400, 50 }) {} // default empty selectable rectangle

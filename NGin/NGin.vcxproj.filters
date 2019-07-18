@@ -21,9 +21,6 @@
     <ClCompile Include="NGin\UI\Dropdown.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NGin\Utils\Center.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="NGin\Base\Animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -48,6 +45,9 @@
     <ClCompile Include="NGin\Base\Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="NGin\Utils\Align.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="NGin\UI\Button.h">
@@ -57,9 +57,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="NGin\UI\Dropdown.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NGin\Utils\Center.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="NGin\Base.h">
@@ -93,6 +90,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="NGin\Base\Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NGin\Utils\Align.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

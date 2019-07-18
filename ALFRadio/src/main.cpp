@@ -33,11 +33,52 @@ int main()
 	// set default location of resources
 	NGin::ResourceCodex::setLocation("assets/");
 
+	// take first time measurement to not leave 0
+	NGin::Timer::measureSysTime();
+
 	// declare and set up application
 	Application application;
+	application.Setup();
 
-	// run application on the render window
-	application.run(window);
+	// signal reaching this point
+	NGin::Logger::log("Aprily Radio - App Started");
+
+	/* APPLLICATION LOOP START*/
+
+	while (window.isOpen())
+	{
+		NGin::Timer::measureSysTime();
+		NGin::Timer::measureDeltaTime();
+
+		sf::Event event;
+
+		while (window.pollEvent(event))
+		{
+			// insert input handling in here
+
+			if (event.type == sf::Event::Closed)
+				window.close();
+
+			// record the mouse into this static class
+			NGin::UI::Cursor::followMouse(window);
+
+			// handle app events
+			application.handleEvents(event);
+		}
+
+		// clear render window
+		window.clear();
+
+		// update the logic
+		application.Update(window);
+		// compose the visuals
+		application.Compose(window);
+
+		// display new visuals
+		window.display();
+	}
+
+	/* APPLLICATION LOOP END*/
 
 	return 0;
 }

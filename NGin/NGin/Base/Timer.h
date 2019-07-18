@@ -15,12 +15,14 @@ namespace NGin {
 		static bool getSysMeasured() { return sys_time.tm_year; }
 		// get system time as tm object
 		static tm getSys() { return sys_time; }
-		// get system time in yyyy.mm.dd hh:ss format
+		// get system time in yyyy.mm.dd hh format as string
 		static std::string getSysString() { return year + "." + mon + "." + day + " " + hour + ":" + min + ":" + sec; }
-		// get system date in yyyy.mm.dd format
-		static std::string getSysDateString() { return year + "." + mon + "." + day; }
-		// get system time in hh::mm format
-		static std::string getSysTimeString() { return hour + ":" + min + ":" + sec; }
+		// get system date in yyyy.mm.dd format as string
+		static std::string getSysYMDStr() { return year + "." + mon + "." + day; }
+		// get system time in h::mm:ss format as string
+		static std::string getSysHMSStr() { return hour + ":" + min + ":" + sec; }
+		// get system time in hh:mm format as string
+		static std::string getSysHMStr() { return hour + ":" + min; }
 
 		// get delta the delta time measured
 		static float getDeltaTime() { return delta_time; }

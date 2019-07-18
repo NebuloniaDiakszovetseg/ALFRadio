@@ -100,7 +100,7 @@ namespace NGin::UI
 								texts[0].setString(texts[i].getString());
 
 								// center the new text properly
-								centerTextInBounds(texts[0], { shape.getGlobalBounds().left + outlineThickness,
+								centCentTxtInBou(texts[0], { shape.getGlobalBounds().left + outlineThickness,
 																  shape.getGlobalBounds().top + outlineThickness,
 																  size.x * shape.getScale().x,
 																  size.y * shape.getScale().y });
@@ -151,7 +151,7 @@ namespace NGin::UI
 
 		// puts added element's text inside its container
 		int i = texts.size() - 1;
-		centerTextInBounds(texts[i], { shape.getGlobalBounds().left,
+		centCentTxtInBou(texts[i], { shape.getGlobalBounds().left,
 								  shape.getGlobalBounds().top + shape.getGlobalBounds().height * i,
 								  shape.getGlobalBounds().width,
 								  shape.getGlobalBounds().height });
@@ -165,7 +165,7 @@ namespace NGin::UI
 
 			// repositions elements properly after the deleted element
 			for (int i = index; i < int(isSelected.size()); i++) {
-				centerTextInBounds(texts[i], { shape.getGlobalBounds().left,
+				centCentTxtInBou(texts[i], { shape.getGlobalBounds().left,
 						  shape.getGlobalBounds().top + shape.getGlobalBounds().height * i,
 						  shape.getGlobalBounds().width,
 						  shape.getGlobalBounds().height });
@@ -189,7 +189,7 @@ namespace NGin::UI
 		{
 			texts[i].setFont(in_font);
 
-			centerTextInBounds(texts[i], { shape.getGlobalBounds().left,
+			centCentTxtInBou(texts[i], { shape.getGlobalBounds().left,
 											  shape.getGlobalBounds().top + shape.getGlobalBounds().height * i,
 											  shape.getGlobalBounds().width,
 											  shape.getGlobalBounds().height });
@@ -215,7 +215,7 @@ namespace NGin::UI
 
 		for (int i = 0; i < int(texts.size()); i++)
 		{
-			centerTextInBounds(texts[i], { shape.getGlobalBounds().left,
+			centCentTxtInBou(texts[i], { shape.getGlobalBounds().left,
 											  shape.getGlobalBounds().top + shape.getGlobalBounds().height * i,
 											  shape.getGlobalBounds().width,
 											  shape.getGlobalBounds().height });
@@ -226,7 +226,7 @@ namespace NGin::UI
 		for (int i = 0; i < int(texts.size()); i++) {
 			texts[i].setCharacterSize(charSize);
 
-			centerTextInBounds(texts[i], { shape.getGlobalBounds().left,
+			centCentTxtInBou(texts[i], { shape.getGlobalBounds().left,
 								  shape.getGlobalBounds().top + shape.getGlobalBounds().height * i,
 								  shape.getGlobalBounds().width,
 								  shape.getGlobalBounds().height });
@@ -236,7 +236,7 @@ namespace NGin::UI
 	{
 		texts[i].setString(text);
 
-		centerTextInBounds(texts[i], { shape.getGlobalBounds().left,
+		centCentTxtInBou(texts[i], { shape.getGlobalBounds().left,
 					  shape.getGlobalBounds().top + shape.getGlobalBounds().height * i,
 					  shape.getGlobalBounds().width,
 					  shape.getGlobalBounds().height });

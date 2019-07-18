@@ -12,7 +12,7 @@ namespace NGin::UI
 				isSelected.push_back(false);
 				isActive.push_back(false);
 				texts.push_back({ "", sf::Font{}, 22 });
-				centerTextInShape(texts[0], shape);
+				centCentTxtInSh(texts[0], shape);
 
 			outlineThickness = 3; // the thickness of outline when selected
 

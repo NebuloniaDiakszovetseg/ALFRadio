@@ -2,7 +2,10 @@
 #include "NGin/Base.h"
 #include "NGin/UserInterface.h"
 
+#include "Input.h" // contains file names thet should be loaded
+
 #include "MPlayer.h"
+#include "CPanel.h"
 
 // render window properties
 static constexpr auto win_name = "Aprily Radio - RenderWindow";
@@ -16,7 +19,24 @@ static constexpr int c_height = 480;
 
 class Application {
 public:
-	void run(sf::RenderWindow& window);
+	void Setup();
+	void handleEvents(const sf::Event& event);
+	void Update(sf::RenderWindow& window);
+	void Compose(sf::RenderWindow& window);
+
+	void loadCurrInput();
 private:
-	MPlayer mPlayer;
+	MPlayer mPlayer; // music player
+	CPanel cPanel; // control panel
+	
+	// saves today's date to check on it if it changes
+	int today;
+
+	/*Actual Music*/
+	// the music file that gets loaded into memory
+	HSAMPLE sample{};
+	// the channel through which the music gets played
+	HCHANNEL channel{};
+	// length of the current sample in bits
+	QWORD curr_sample_length = 0;
 };

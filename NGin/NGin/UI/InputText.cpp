@@ -81,7 +81,7 @@ namespace NGin::UI {
 			// add new string to output text
 			text.setString(container);
 			// center text
-			centerTextInShape(text, shape);
+			centCentTxtInSh(text, shape);
 			// adjusts cursor's position
 			adjustCursor();
 		}
@@ -101,14 +101,14 @@ namespace NGin::UI {
 	void InputText::setPosition(const sf::Vector2f& position)
 	{
 		shape.setPosition(position);
-		centerTextInShape(text, shape);
+		centCentTxtInSh(text, shape);
 	}
 	void InputText::setFont(sf::Font& font)
 	{
 		text.setFont(font);
 		cursor.setFont(font);
 
-		centerTextInShape(text, shape);
+		centCentTxtInSh(text, shape);
 	}
 	void InputText::setMaxCharacters(const unsigned nrofMaxChars)
 	{
@@ -118,11 +118,11 @@ namespace NGin::UI {
 	{
 		text.setString(str);
 		// centers the newly added string
-		centerTextInShape(text, shape);
+		centCentTxtInSh(text, shape);
 	}
 	void InputText::setCharacterSize(const unsigned charSize) {
 		text.setCharacterSize(charSize);
-		centerTextInShape(text, shape);
+		centCentTxtInSh(text, shape);
 
 		cursor.setCharacterSize(charSize);
 	}
@@ -146,7 +146,7 @@ namespace NGin::UI {
 		}
 		else {
 			// if there is no text put the cursor in center of shape
-			centerTextInShape(cursor, shape);
+			centCentTxtInSh(cursor, shape);
 		}
 
 	}

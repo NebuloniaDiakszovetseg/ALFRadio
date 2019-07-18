@@ -70,7 +70,7 @@ namespace NGin::UI
 		text.setFont(font);
 
 		// centers text with the new font in mind
-		centerTextInShape(text, shape);
+		centCentTxtInSh(text, shape);
 		textPos = text.getPosition();
 	}
 	void Button::setTextColor(const sf::Color & color)
@@ -103,7 +103,7 @@ namespace NGin::UI
 		shape.setPosition(position);
 
 		// update the position of the text based on shape's position
-		centerTextInShape(text, shape);
+		centCentTxtInSh(text, shape);
 		textPos = text.getPosition();
 	}
 	void Button::setSelectColor(const sf::Color & color)
@@ -124,7 +124,7 @@ namespace NGin::UI
 		text.setCharacterSize(int(38 * scale.y));
 
 		//centers the newly sized text
-		centerTextInShape(text, shape);
+		centCentTxtInSh(text, shape);
 		textPos = text.getPosition();
 	}
 	void Button::setCharacterSize(const int size)
@@ -133,7 +133,7 @@ namespace NGin::UI
 		this->text.setCharacterSize(size);
 
 		//centers the string with its new height
-		centerTextInShape(text, shape);
+		centCentTxtInSh(text, shape);
 		textPos = text.getPosition();
 	}
 	void Button::setInactivity(const bool in_isInactive)
@@ -171,7 +171,7 @@ namespace NGin::UI
 		this->text.setString(txt);
 
 		//centers the new string of text
-		centerTextInShape(text, shape);
+		centCentTxtInSh(text, shape);
 		textPos = text.getPosition();
 	}
 }

@@ -21,7 +21,7 @@
     <ClCompile Include="NGin\UI\Slider.cpp" />
     <ClCompile Include="NGin\UI\Switcher.cpp" />
     <ClCompile Include="NGin\UI\InputText.cpp" />
-    <ClCompile Include="NGin\Utils\Center.cpp" />
+    <ClCompile Include="NGin\Utils\Align.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="NGin\Base.h" />
@@ -37,7 +37,7 @@
     <ClInclude Include="NGin\UI\InputText.h" />
     <ClInclude Include="NGin\UserInterface.h" />
     <ClInclude Include="NGin\Utils.h" />
-    <ClInclude Include="NGin\Utils\Center.h" />
+    <ClInclude Include="NGin\Utils\Align.h" />
     <ClInclude Include="NGin\UI\UIElement.h" />
   </ItemGroup>
   <ItemGroup>

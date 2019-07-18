@@ -12,16 +12,16 @@ namespace NGin {
 		// Change font color based on severity
 		if (severity == Severity::Info) {
 			SetConsoleTextAttribute(consoleHandle, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-			if (Timer::getSysMeasured()) std::cout << "(" << Timer::getSysTimeString() << ") ";
+			if (Timer::getSysMeasured()) std::cout << "(" << Timer::getSysHMSStr() << ") ";
 			else std::cout << "INFO: ";
 		}
 		else if (severity == Severity::Warning) {
 			SetConsoleTextAttribute(consoleHandle, FOREGROUND_RED | FOREGROUND_GREEN);
-			if (Timer::getSysMeasured()) std::cout << "(" << Timer::getSysTimeString() << ") ";
+			if (Timer::getSysMeasured()) std::cout << "(" << Timer::getSysHMSStr() << ") ";
 			else std::cout << "WARNING: ";
 		} else if (severity == Severity::Error) {
 			SetConsoleTextAttribute(consoleHandle, FOREGROUND_RED | FOREGROUND_INTENSITY);
-			if (Timer::getSysMeasured()) std::cout << "(" << Timer::getSysTimeString() << ") ";
+			if (Timer::getSysMeasured()) std::cout << "(" << Timer::getSysHMSStr() << ") ";
 			else std::cout << "ERROR: ";
 		} 
 
