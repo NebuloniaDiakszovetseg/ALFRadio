@@ -37,7 +37,20 @@ void CPanel::Setup()
 	inout_txt.setString("Auto Intro/Outro");
 	inout_txt.setCharacterSize(18);
 	inout_txt.setPosition({ 75, 170 + inout_txt.getGlobalBounds().height / 2 + inout_txt.getLocalBounds().top });
+	
+	/*Randomize Switcher*/
+	rand_sw.setPosition({ 25, 225 });
+	rand_sw.setTexture(*NGin::ResourceCodex::Acquire<sf::Texture>("switcher.png"));
+	rand_sw.setFillColor(sf::Color(250, 130, 52));
+	rand_sw.setMarkColor(sf::Color(20, 20, 20));
 
+	rand_txt.setFont(*NGin::ResourceCodex::Acquire<sf::Font>("KeepCalm-Medium.ttf"));
+	rand_txt.setFillColor(sf::Color(243, 96, 0));
+	rand_txt.setString("Randomize NF Files");
+	rand_txt.setCharacterSize(18);
+	rand_txt.setPosition({ 75, 225 + rand_txt.getGlobalBounds().height / 2 + rand_txt.getLocalBounds().top });
+
+	/*Table*/
 	header_elem.setPosition({ 25, 350 });
 	header_elem.setSize({ 250, 30 });
 	header_elem.setFillColor(sf::Color(35,35,35));
@@ -75,6 +88,9 @@ void CPanel::handleEvents(const sf::Event& event)
 	inoutro.select(NGin::UI::Cursor::getPosition());
 	inoutro.handleEvents(event);
 
+	rand_sw.select(NGin::UI::Cursor::getPosition());
+	rand_sw.handleEvents(event);
+
 	// info-screen toggle
 	if (info_button.getGlobalBounds().intersects({ NGin::UI::Cursor::getPosition(), {1,1} })) {
 		info_button.setTexture(*NGin::ResourceCodex::Acquire<sf::Texture>("nebulogo.png"));
@@ -106,6 +122,16 @@ void CPanel::Update()
 			table_elem[i].setFillColor(header_elem.getFillColor());
 		}
 	}
+
+	// log switcher stance changes
+	if (inoutro.hasChanged()) {
+		if (inoutro.isActive()) {
+			NGin::Logger::log("Auto Intro-Outro -- Activated!");
+		}
+		else {
+			NGin::Logger::log("Auto Intro-Outro -- Deactivated!");
+		}
+	}
 }
 
 void CPanel::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -116,6 +142,8 @@ void CPanel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(vol_text);
 	target.draw(inoutro);
 	target.draw(inout_txt);
+	target.draw(rand_sw);
+	target.draw(rand_txt);
 	target.draw(info_screen); // only gets drawn if logo is hovered on
 	target.draw(info_button);
 
@@ -136,12 +164,24 @@ void CPanel::playIntro(HCHANNEL& channel)
 	BASS_ChannelPlay(channel, FALSE);
 }
 
+bool CPanel::introStopped(const HCHANNEL& channel)
+{
+	return (inoutActive() && BASS_ChannelIsActive(channel) != BASS_ACTIVE_PLAYING
+		&& intro_length == BASS_ChannelGetLength(channel, BASS_POS_BYTE));
+}
+
 void CPanel::playOutro(HCHANNEL& channel)
 {
 	BASS_ChannelStop(channel);
 	channel = BASS_SampleGetChannel(outro, FALSE);
 	outro_length = BASS_ChannelGetLength(channel, BASS_POS_BYTE);
 	BASS_ChannelPlay(channel, FALSE);
+}
+
+bool CPanel::outroStopped(const HCHANNEL& channel)
+{
+	return (inoutActive() && BASS_ChannelIsActive(channel) != BASS_ACTIVE_PLAYING
+		&& outro_length == BASS_ChannelGetLength(channel, BASS_POS_BYTE));
 }
 
 void CPanel::loadInOut()

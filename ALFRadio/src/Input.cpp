@@ -9,14 +9,14 @@ std::vector<std::string> Input::file_names = {"1.szunet.mp3",
 										 "5.szunet.mp3",
 										 "6.szunet.mp3"};
 
-std::vector<std::string> Input::start_times = { "08:20",
+std::vector<std::string> Input::start_times = { "20:49",
 												"09:20",
 												"10:20",
 												"11:20",
 												"12:30",
 												"13:30" };
 
-std::vector<std::string> Input::end_times = {"08:32",
+std::vector<std::string> Input::end_times = {"20:50",
 											 "09:32",
 											 "10:32",
 											 "11:42",
@@ -55,4 +55,5 @@ bool Input::prevFile()
 void Input::resetFile()
 {
 	curr_index = 0;
+	prev_index = -1;
 }

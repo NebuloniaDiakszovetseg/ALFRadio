@@ -8,7 +8,7 @@ void Application::Setup()
 	loadCurrInput();
 
 	BASS_ChannelSetAttribute(channel, BASS_ATTRIB_VOL, cPanel.getVolume());
-	today = NGin::Timer::getSys().tm_mday;
+	today = NGin::Timer::getSys().tm_mday; // save today as current date
 }
 
 void Application::handleEvents(const sf::Event& event)
@@ -19,27 +19,24 @@ void Application::handleEvents(const sf::Event& event)
 
 void Application::Update(sf::RenderWindow& window)
 {
+	// if date changes reset to first file and change date folder
+	if (today != NGin::Timer::getSys().tm_mday) {
+		today = NGin::Timer::getSys().tm_mday; // set new date
+		Input::resetFile();
+	}
 	// reloads files if changed
 	if (Input::hasChanged()) {
 		loadCurrInput();
 	}
 
-	/*CPanel - START*/
 	// update control panel's visuals based on general app state
 	cPanel.Update();
-	
-	// set volume when cPanel slider changes it
-	BASS_ChannelSetAttribute(channel, BASS_ATTRIB_VOL, cPanel.getVolume());
-	/*CPanel - END*/
-
-	/*MPlayer - START*/
-	// if date changes reset to first file and change date folder
-	if (today != NGin::Timer::getSys().tm_mday) {
-		Input::resetFile();
-	}
 
 	// update mPlayer's visuals based on channel's state
 	mPlayer.Update(channel);
+	
+	// set volume when cPanel slider changes it
+	BASS_ChannelSetAttribute(channel, BASS_ATTRIB_VOL, cPanel.getVolume());
 
 	// load next sample if current one ends
 	// or exceeds time limit 
@@ -47,28 +44,76 @@ void Application::Update(sf::RenderWindow& window)
 		mPlayer.getSeekerPos() >= mPlayer.getChannelLength() * 0.9999f ||
 		Input::getEndTime(Input::getCurrIndex()) == NGin::Timer::getSysHMStr())
 	{
-		BASS_ChannelPause(channel);
+		// prompt the user about the forceful stop
+		if (Input::getEndTime(Input::getCurrIndex()) == NGin::Timer::getSysHMStr())
+		{
+			NGin::Logger::log("Time limit exceeded -> Channel STOPPED automatically", NGin::Logger::Severity::Warning);
+		}
+
+		// Auto Outro
+		if (cPanel.inoutActive()) {
+			cPanel.playOutro(channel);
+			// Continue Playing
+			mPlayer.setPlayActive(true);
+		}
+		else {
+			// Load next file
+			BASS_ChannelStop(channel);
+			Input::nextFile();
+			loadCurrInput();
+		}
+	}
+
+	// If Auto-Outro Stopped
+	if (cPanel.outroStopped(channel))
+	{
+		// Load next file
+		BASS_ChannelStop(channel);
 		Input::nextFile();
 		loadCurrInput();
 	}
+	// If Auto-Intro Stopped
+	if (cPanel.introStopped(channel))
+	{
+		// Start the sample
+		BASS_ChannelStop(channel);
+		channel = BASS_SampleGetChannel(sample, FALSE);
 
-	// autoplay on Input-given times
+		// Continue Playing
+		mPlayer.setPlayActive(true);
+		mPlayer.setSeekerPos(0.0002f); // bypass infinite intro loop bug
+		BASS_ChannelPlay(channel, FALSE);
+	}
+
+	// Autoplay on Input-given times
 	if (Input::getStartTime(Input::getCurrIndex()) == NGin::Timer::getSysHMStr())
 	{
 		mPlayer.setPlayActive(true);
 	}
 
-	// plays the music if it should play
+	// starts playing the music if it should play
 	if (mPlayer.playMusic() && BASS_ChannelIsActive(channel) != BASS_ACTIVE_PLAYING) {
+
+		// Auto Intro
+		if (cPanel.inoutActive() && mPlayer.getSeekerPos() <= mPlayer.getChannelLength() * 0.0001f &&
+			curr_sample_length == BASS_ChannelGetLength(channel, BASS_POS_BYTE))
+		{
+			cPanel.playIntro(channel);
+		}
+
 		BASS_ChannelPlay(channel, FALSE);
-		if (BASS_ErrorGetCode() == BASS_ERROR_START) {
-			NGin::Logger::log("Error Playing on main channel!", NGin::Logger::Severity::Error);
+		if (BASS_ErrorGetCode() == BASS_ERROR_START)
+		{
+			NGin::Logger::log("Error Playing on main channel! -> Please restart the program \n"
+				"->If the error persists, contact me (Szoke Andras-Lorand) at \nhttp://www.nebulonia.ro/creators",
+				NGin::Logger::Severity::Error);
+			
 			system("pause");
 			window.close();
 		}
 		else NGin::Logger::log("Channel Started -- Code: " + std::to_string(BASS_ErrorGetCode()));
 	}
-	// stops the music if it should stop
+	// pauses the music if manually paused
 	if (mPlayer.stopMusic() && BASS_ChannelIsActive(channel) == BASS_ACTIVE_PLAYING) {
 		BASS_ChannelPause(channel);
 		NGin::Logger::log("Channel Paused -- Code: " + std::to_string(BASS_ErrorGetCode()));
@@ -78,13 +123,6 @@ void Application::Update(sf::RenderWindow& window)
 	if(mPlayer.seekerMoved()){
 		BASS_ChannelSetPosition(channel, mPlayer.getSeekerPos(), BASS_POS_BYTE);
 	}
-	/*
-	if (curr_sample_length == BASS_ChannelGetLength(channel, BASS_POS_BYTE)) {
-		cPanel.playIntro(channel);
-	}
-
-		BASS_ChannelStop(channel);
-	channel = BASS_SampleGetChannel(sample, FALSE);*/
 }
 
 void Application::Compose(sf::RenderWindow& window)

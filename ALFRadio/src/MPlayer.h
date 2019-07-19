@@ -20,8 +20,8 @@ public:
 
 	/*Play/Pause*/
 	void setPlayActive(bool isActive) { play.setisActive(isActive); }
-	bool playMusic() { return play.getisActive() && ch_length != -1; }
-	bool stopMusic() { return !play.getisActive() && ch_length != -1; }
+	bool playMusic() { return play.isActive() && ch_length != -1; }
+	bool stopMusic() { return !play.isActive() && ch_length != -1; }
 private:
 	/*Music Player*/
 	sf::Sprite banner; // the banner above the player's controls

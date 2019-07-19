@@ -13,8 +13,10 @@ namespace NGin::UI {
 		}
 
 		if (button.activated()) {
-			isActive = !isActive;
+			is_active = !is_active;
+			has_changed = true;
 		}
+		else has_changed = false;
 
 	}
 	void Switcher::select(const sf::Vector2f& mouse)
@@ -25,7 +27,7 @@ namespace NGin::UI {
 	{
 		button.draw(target, states);
 		
-		if(isActive)
+		if(is_active)
 			target.draw(mark);
 	}
 	void Switcher::setTexture(const sf::Texture& texture)
@@ -68,15 +70,11 @@ namespace NGin::UI {
 	}
 	void Switcher::setisActive(const bool active)
 	{
-		isActive = active;
+		is_active = active;
 		mark.setTextureRect({ int(2 * mark.getSize().x), 0, int(mark.getSize().x), int(mark.getSize().y) });
 	}
 	void Switcher::setInactivity(const bool inactive)
 	{
 		button.setInactivity(inactive);
-	}
-	bool Switcher::getisActive()
-	{
-		return isActive;
 	}
 }

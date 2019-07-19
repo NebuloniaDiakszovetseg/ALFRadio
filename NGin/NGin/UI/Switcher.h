@@ -38,8 +38,14 @@ namespace NGin::UI {
 		// makes  object unable to act
 		void setInactivity(const bool inactive);
 
-		// returns true whether switcher is  active
-		bool getisActive();
+		// returns true whether switcher is active
+		bool isActive() { return is_active; }
+		// signals whether isActive has changed in given frame
+		// value is destroyed after taking
+		bool hasChanged() {
+			if (has_changed) { has_changed = false; return true; }
+			else return false;
+		}
 		sf::Vector2f getSize() const { return button.getSize(); }
 	private:
 		// this is the mark getting displayed over the button whenever switched on
@@ -50,6 +56,7 @@ namespace NGin::UI {
 		// this is the base button that gtets transformed into switcher
 		Button button;
 
-		bool isActive = false;
+		bool is_active = false; // true whnever object is in active state
+		bool has_changed = false; // true for one frame whenever object changes stance
 	};
 }

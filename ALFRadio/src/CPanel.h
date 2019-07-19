@@ -21,8 +21,10 @@ public:
 
 	float getVolume() { return volume_val; }
 	void playIntro(HCHANNEL& channel);
+	bool introStopped(const HCHANNEL& channel);
 	void playOutro(HCHANNEL& channel);
-	bool inoutActive() { return inoutro.getisActive(); }
+	bool outroStopped(const HCHANNEL& channel);
+	bool inoutActive() { return inoutro.isActive(); }
 private:
 	/*Unmoving elements*/
 	sf::RectangleShape background; // background color of the panel
@@ -39,8 +41,12 @@ private:
 	float volume_val = 1.0f; // 0-none 1-normal max_volume-max
 
 	/*Switches*/
-	NGin::UI::Switcher inoutro{ {40, 40} }; // if active sticks the intro and outro to the beginning/end of each piece
+	NGin::UI::Switcher inoutro{ {40, 40} }; // if active plays separate intro and outro files
 	sf::Text inout_txt; // the text next to intro-outro switch
+	
+	/*Switches*/
+	NGin::UI::Switcher rand_sw{ {40, 40} }; // if active plays random songs when file not found
+	sf::Text rand_txt; // the text next to intro-outro switch
 
 	/*File-table*/
 	sf::RectangleShape header_elem;
@@ -50,7 +56,7 @@ private:
 
 	HSAMPLE intro{};  // piece getting played before break
 	QWORD intro_length = 0; // the length of the intro in bytes
-	HSAMPLE outro{}; // piece getting played after break
+	HSAMPLE outro{}; // piece gtting played after break
 	QWORD outro_length = 0; // the length of the outro in bytes
 private:
 	void loadInOut();
