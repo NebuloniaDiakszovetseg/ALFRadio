@@ -30,6 +30,10 @@ private:
 	NGin::UI::Button prev{ {60, 60} };
 	NGin::UI::Button next{ {60, 60} };
 
+	sf::Text lengthText_;
+	sf::Text positionText_;
+	std::string convertBytes(const HCHANNEL& channel, const QWORD& bytes);
+
 	QWORD ch_length = 0; // length of channel in bits
 	float ch_lenper = 0.0f; // length of channel in percents
 };

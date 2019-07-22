@@ -47,13 +47,16 @@ private:
 	const float maxVolume_ = 1.5f; // the maximum volume at which the slider stops
 	float volumeValue_ = 1.0f; // 0-none 1-normal max_volume-max
 
-	/*Switches*/
+	// Auto Intr-Outro
 	NGin::UI::Switcher introSwitcher_{ {40, 40} }; // activates intro AND outro
 	sf::Text introText_; // the text next to intro-outro switch
-	
-	/*Switches*/
+
+	// Random NF Files
 	NGin::UI::Switcher randomSwitcher_{ {40, 40} }; // if active plays random songs when file not found
 	sf::Text randomText_; // the text next to intro-outro switch
+
+	NGin::UI::Switcher dimOnMic_{{ 40, 40 }}; // dims channel volume when mic has input
+	sf::Text dimOnMicText_; // the text next to dimmer switch
 
 	/*File-table*/
 	sf::RectangleShape headerShape_;

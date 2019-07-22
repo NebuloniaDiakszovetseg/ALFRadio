@@ -18,6 +18,14 @@ void MPlayer::Setup()
 	next.setTexture(*NGin::ResourceCodex::Acquire<sf::Texture>("next.png"));
 	next.setPosition({ 710, 415 });
 
+	lengthText_.setFont(*NGin::ResourceCodex::Acquire<sf::Font>("KeepCalm-Medium.ttf"));
+	lengthText_.setCharacterSize(12);
+	lengthText_.setPosition({ 885, 490 });
+
+	positionText_.setFont(*NGin::ResourceCodex::Acquire<sf::Font>("KeepCalm-Medium.ttf"));
+	positionText_.setCharacterSize(12);
+	positionText_.setPosition({ 380, 490 });
+
 	seeker.setLevel(0);
 }
 
@@ -58,6 +66,24 @@ void MPlayer::Update(const HCHANNEL& channel)
 		ch_lenper = float(BASS_ChannelGetPosition(channel, BASS_POS_BYTE)) / ch_length;
 		seeker.setLevel(ch_lenper);
 	}
+
+	// Update length text
+	double rawLength = BASS_ChannelBytes2Seconds(channel, ch_length);
+	int lengthInMin = static_cast<int>(rawLength / 60);
+	int lengthInSec = static_cast<int>(rawLength - (lengthInMin * 60));
+
+	std::string lengthStr;
+
+	if (lengthInMin < 10) lengthStr = "0" + std::to_string(lengthInMin) + ":";
+	else lengthStr = std::to_string(lengthInMin) + ":";
+
+	if (lengthInSec < 10) lengthStr += "0" + std::to_string(lengthInSec);
+	else lengthStr += std::to_string(lengthInSec);
+
+	lengthText_.setString(convertBytes(channel, ch_length));
+
+	positionText_.setString(convertBytes(channel,
+		BASS_ChannelGetPosition(channel, BASS_POS_BYTE)));
 }
 
 void MPlayer::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -67,4 +93,23 @@ void MPlayer::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(seeker);
 	target.draw(prev);
 	target.draw(next);
+	target.draw(lengthText_);
+	target.draw(positionText_);
+}
+
+std::string MPlayer::convertBytes(const HCHANNEL& channel, const QWORD& bytes)
+{
+	double rawLength = BASS_ChannelBytes2Seconds(channel, bytes);
+	int lengthInMin = static_cast<int>(rawLength / 60);
+	int lengthInSec = static_cast<int>(rawLength - (lengthInMin * 60));
+
+	std::string lengthStr = "";
+
+	if (lengthInMin < 10) lengthStr = "0" + std::to_string(lengthInMin) + ":";
+	else lengthStr = std::to_string(lengthInMin) + ":";
+
+	if (lengthInSec < 10) lengthStr += "0" + std::to_string(lengthInSec);
+	else lengthStr += std::to_string(lengthInSec);
+
+	return lengthStr;
 }

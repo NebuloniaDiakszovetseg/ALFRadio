@@ -50,6 +50,18 @@ void CPanel::Setup()
 	randomText_.setCharacterSize(18);
 	randomText_.setPosition({ 75, 225 + randomText_.getGlobalBounds().height / 2 + randomText_.getLocalBounds().top });
 
+	// Microphone activated volume dimmer switcher
+	dimOnMic_.setPosition({ 25, 280 });
+	dimOnMic_.setTexture(*NGin::ResourceCodex::Acquire<sf::Texture>("switcher.png"));
+	dimOnMic_.setFillColor(sf::Color(250, 130, 52));
+	dimOnMic_.setMarkColor(sf::Color(20, 20, 20));
+
+	dimOnMicText_.setFont(*NGin::ResourceCodex::Acquire<sf::Font>("KeepCalm-Medium.ttf"));
+	dimOnMicText_.setFillColor(sf::Color(243, 96, 0));
+	dimOnMicText_.setString("Dim If Mic Active");
+	dimOnMicText_.setCharacterSize(18);
+	dimOnMicText_.setPosition({ 75, 280 + dimOnMicText_.getGlobalBounds().height / 2 + dimOnMicText_.getLocalBounds().top });
+
 	/*Table*/
 	headerShape_.setPosition({ 25, 350 });
 	headerShape_.setSize({ 250, 30 });
@@ -91,6 +103,9 @@ void CPanel::handleEvents(const sf::Event& event)
 	randomSwitcher_.select(NGin::UI::Cursor::getPosition());
 	randomSwitcher_.handleEvents(event);
 
+	dimOnMic_.select(NGin::UI::Cursor::getPosition());
+	dimOnMic_.handleEvents(event);
+
 	// info-screen toggle
 	if (infoButton_.getGlobalBounds().intersects({ NGin::UI::Cursor::getPosition(), {1,1} })) {
 		infoButton_.setTexture(*NGin::ResourceCodex::Acquire<sf::Texture>("nebulogo.png"));
@@ -122,14 +137,23 @@ void CPanel::Update()
 	}
 
 	// log switcher stance changes
-	if (introSwitcher_.hasChanged()) {
-		if (introSwitcher_.isActive()) {
+	if (introSwitcher_.hasChanged())
+		if (introSwitcher_.isActive())
 			NGin::Logger::log("Auto Intro-Outro -- Activated!");
-		}
-		else {
+		else
 			NGin::Logger::log("Auto Intro-Outro -- Deactivated!");
-		}
-	}
+
+	if (randomSwitcher_.hasChanged())
+		if (randomSwitcher_.isActive())
+			NGin::Logger::log("Randomize if no files found -- Activated!");
+		else
+			NGin::Logger::log("Randomize if no files found  -- Deactivated!");
+
+	if (dimOnMic_.hasChanged())
+		if (dimOnMic_.isActive())
+			NGin::Logger::log("Dim app volume if microphone has input -- Activated!");
+		else
+			NGin::Logger::log("Dim app volume if microphone has input  -- Deactivated!");
 }
 
 void CPanel::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -142,6 +166,8 @@ void CPanel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(introText_);
 	target.draw(randomSwitcher_);
 	target.draw(randomText_);
+	target.draw(dimOnMic_);
+	target.draw(dimOnMicText_);
 	target.draw(infoScreen_); // only gets drawn if logo is hovered on
 	target.draw(infoButton_);
 

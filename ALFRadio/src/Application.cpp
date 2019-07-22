@@ -124,12 +124,12 @@ void Application::Update(sf::RenderWindow& window)
 		BASS_ChannelSetPosition(channel, mPlayer.getSeekerPos(), BASS_POS_BYTE);
 	}
 
-	BASS_DEVICEINFO dinfo;
-	for (int a = 0; BASS_RecordGetDeviceInfo(a, &dinfo); a++)
-		if ((dinfo.flags & BASS_DEVICE_ENABLED) && (dinfo.flags & BASS_DEVICE_TYPE_MASK) == BASS_DEVICE_TYPE_MICROPHONE) { // found an enabled microphone
-			NGin::Logger::log("yay");
-			break;
-		}
+	//BASS_DEVICEINFO dinfo;
+	//for (int a = 0; BASS_RecordGetDeviceInfo(a, &dinfo); a++)
+	//	if ((dinfo.flags & BASS_DEVICE_ENABLED) && (dinfo.flags & BASS_DEVICE_TYPE_MASK) == BASS_DEVICE_TYPE_MICROPHONE) { // found an enabled microphone
+	//		NGin::Logger::log("yay");
+	//		break;
+	//	}
 }
 
 void Application::Compose(sf::RenderWindow& window)
