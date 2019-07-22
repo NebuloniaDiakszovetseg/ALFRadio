@@ -14,50 +14,57 @@ public:
 public:
 	CPanel() {
 		for (int i = 0; i < int(Input::nrofFiles()); i++) {
-			table_elem.push_back(sf::RectangleShape{});
-			table_txt.push_back(sf::Text{});
+			tableShape_.push_back(sf::RectangleShape{});
+			tableText_.push_back(sf::Text{});
 		}
 	}
 
-	float getVolume() { return volume_val; }
+	void setHeaderText(std::string headerText) {
+		headerText_.setString(headerText);
+		NGin::offCentTxtInSh(10, headerText_, headerShape_);
+	}
+	void randomSetActive(const bool active) { randomSwitcher_.setisActive(active); }
+
+	float getVolume() { return volumeValue_; }
 	void playIntro(HCHANNEL& channel);
 	bool introStopped(const HCHANNEL& channel);
 	void playOutro(HCHANNEL& channel);
 	bool outroStopped(const HCHANNEL& channel);
-	bool inoutActive() { return inoutro.isActive(); }
+	bool introShouldPlay() { return introSwitcher_.isActive(); }
+	bool randomGetActive() { return randomSwitcher_.isActive(); }
 private:
 	/*Unmoving elements*/
-	sf::RectangleShape background; // background color of the panel
-	sf::Text date_time; // to display date
+	sf::RectangleShape background_; // background color of the panel
+	sf::Text dateTime_; // to display date
 
 	/*Info*/
-	sf::Sprite info_button; // nebulonia logo
-	sf::Sprite info_screen; // overlay showing informations when activated
+	sf::Sprite infoButton_; // nebulonia logo
+	sf::Sprite infoScreen_; // overlay showing informations when activated
 
 	/*Volume*/
-	sf::Text vol_text; // display text "volume" above corresponding slider
-	NGin::UI::Slider volume{ {180, 35}, {35, 35}, {26, 25} }; // to adjust volume
-	const float max_volume = 2.0f; // the maximum volume at which the slider stops
-	float volume_val = 1.0f; // 0-none 1-normal max_volume-max
+	sf::Text volumeText_; // display text "volume" above corresponding slider
+	NGin::UI::Slider volumeSlider_{ {180, 35}, {35, 35}, {26, 25} }; // to adjust volume
+	const float maxVolume_ = 1.5f; // the maximum volume at which the slider stops
+	float volumeValue_ = 1.0f; // 0-none 1-normal max_volume-max
 
 	/*Switches*/
-	NGin::UI::Switcher inoutro{ {40, 40} }; // if active plays separate intro and outro files
-	sf::Text inout_txt; // the text next to intro-outro switch
+	NGin::UI::Switcher introSwitcher_{ {40, 40} }; // activates intro AND outro
+	sf::Text introText_; // the text next to intro-outro switch
 	
 	/*Switches*/
-	NGin::UI::Switcher rand_sw{ {40, 40} }; // if active plays random songs when file not found
-	sf::Text rand_txt; // the text next to intro-outro switch
+	NGin::UI::Switcher randomSwitcher_{ {40, 40} }; // if active plays random songs when file not found
+	sf::Text randomText_; // the text next to intro-outro switch
 
 	/*File-table*/
-	sf::RectangleShape header_elem;
-	sf::Text header_txt;
-	std::vector<sf::RectangleShape> table_elem;
-	std::vector<sf::Text> table_txt;
+	sf::RectangleShape headerShape_;
+	sf::Text headerText_;
+	std::vector<sf::RectangleShape> tableShape_;
+	std::vector<sf::Text> tableText_;
 
-	HSAMPLE intro{};  // piece getting played before break
-	QWORD intro_length = 0; // the length of the intro in bytes
-	HSAMPLE outro{}; // piece gtting played after break
-	QWORD outro_length = 0; // the length of the outro in bytes
+	HSAMPLE introSample_{};  // piece getting played before break
+	QWORD introLength_ = 0; // the length of the intro in bytes
+	HSAMPLE outroSample_{}; // piece gtting played after break
+	QWORD outroLength_ = 0; // the length of the outro in bytes
 private:
 	void loadInOut();
 };

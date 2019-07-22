@@ -2,130 +2,128 @@
 
 void CPanel::Setup()
 {
-	background.setPosition({ 0, 0 });
-	background.setSize({ 300, 600 });
-	background.setFillColor(sf::Color(60, 60, 60));
+	background_.setPosition({ 0, 0 });
+	background_.setSize({ 300, 600 });
+	background_.setFillColor(sf::Color(60, 60, 60));
 
-	date_time.setFont(*NGin::ResourceCodex::Acquire<sf::Font>("KeepCalm-Medium.ttf"));
-	date_time.setPosition({ 90, 38 });
-	date_time.setCharacterSize(18);
-	date_time.setFillColor(sf::Color(243, 96, 0));
+	dateTime_.setFont(*NGin::ResourceCodex::Acquire<sf::Font>("KeepCalm-Medium.ttf"));
+	dateTime_.setPosition({ 90, 38 });
+	dateTime_.setCharacterSize(18);
+	dateTime_.setFillColor(sf::Color(243, 96, 0));
 	
-	info_button.setTexture(*NGin::ResourceCodex::Acquire<sf::Texture>("info.png"));
-	info_button.setPosition({ 20, 20 });
-	info_button.setScale({ 0.1f, 0.1f });
+	infoButton_.setTexture(*NGin::ResourceCodex::Acquire<sf::Texture>("info.png"));
+	infoButton_.setPosition({ 20, 20 });
+	infoButton_.setScale({ 0.1f, 0.1f });
 
 	/*Volume*/
-	volume.setTexture(*NGin::ResourceCodex::Acquire<sf::Texture>("volume.png"));
-	volume.setPosition({ 25, 120 });
-	volume.setFillColor(sf::Color(250, 130, 52));
+	volumeSlider_.setTexture(*NGin::ResourceCodex::Acquire<sf::Texture>("volume.png"));
+	volumeSlider_.setPosition({ 25, 120 });
+	volumeSlider_.setFillColor(sf::Color(250, 130, 52));
 
-	vol_text.setFont(*NGin::ResourceCodex::Acquire<sf::Font>("KeepCalm-Medium.ttf"));
-	vol_text.setCharacterSize(16);
-	vol_text.setFillColor(sf::Color(243, 96, 0));
-	vol_text.setString("Volume:");
-	vol_text.setPosition({ 150 - vol_text.getGlobalBounds().width / 2, 95 });
+	volumeText_.setFont(*NGin::ResourceCodex::Acquire<sf::Font>("KeepCalm-Medium.ttf"));
+	volumeText_.setCharacterSize(16);
+	volumeText_.setFillColor(sf::Color(243, 96, 0));
+	volumeText_.setString("Volume:");
+	volumeText_.setPosition({ 150 - volumeText_.getGlobalBounds().width / 2, 95 });
 
 	/*Intro-Outro Switcher*/
-	inoutro.setPosition({ 25, 170 });
-	inoutro.setTexture(*NGin::ResourceCodex::Acquire<sf::Texture>("switcher.png"));
-	inoutro.setFillColor(sf::Color(250, 130, 52));
-	inoutro.setMarkColor(sf::Color(20, 20, 20));
+	introSwitcher_.setPosition({ 25, 170 });
+	introSwitcher_.setTexture(*NGin::ResourceCodex::Acquire<sf::Texture>("switcher.png"));
+	introSwitcher_.setFillColor(sf::Color(250, 130, 52));
+	introSwitcher_.setMarkColor(sf::Color(20, 20, 20));
 
-	inout_txt.setFont(*NGin::ResourceCodex::Acquire<sf::Font>("KeepCalm-Medium.ttf"));
-	inout_txt.setFillColor(sf::Color(243, 96, 0));
-	inout_txt.setString("Auto Intro/Outro");
-	inout_txt.setCharacterSize(18);
-	inout_txt.setPosition({ 75, 170 + inout_txt.getGlobalBounds().height / 2 + inout_txt.getLocalBounds().top });
+	introText_.setFont(*NGin::ResourceCodex::Acquire<sf::Font>("KeepCalm-Medium.ttf"));
+	introText_.setFillColor(sf::Color(243, 96, 0));
+	introText_.setString("Auto Intro/Outro");
+	introText_.setCharacterSize(18);
+	introText_.setPosition({ 75, 170 + introText_.getGlobalBounds().height / 2 + introText_.getLocalBounds().top });
 	
 	/*Randomize Switcher*/
-	rand_sw.setPosition({ 25, 225 });
-	rand_sw.setTexture(*NGin::ResourceCodex::Acquire<sf::Texture>("switcher.png"));
-	rand_sw.setFillColor(sf::Color(250, 130, 52));
-	rand_sw.setMarkColor(sf::Color(20, 20, 20));
+	randomSwitcher_.setPosition({ 25, 225 });
+	randomSwitcher_.setTexture(*NGin::ResourceCodex::Acquire<sf::Texture>("switcher.png"));
+	randomSwitcher_.setFillColor(sf::Color(250, 130, 52));
+	randomSwitcher_.setMarkColor(sf::Color(20, 20, 20));
 
-	rand_txt.setFont(*NGin::ResourceCodex::Acquire<sf::Font>("KeepCalm-Medium.ttf"));
-	rand_txt.setFillColor(sf::Color(243, 96, 0));
-	rand_txt.setString("Randomize NF Files");
-	rand_txt.setCharacterSize(18);
-	rand_txt.setPosition({ 75, 225 + rand_txt.getGlobalBounds().height / 2 + rand_txt.getLocalBounds().top });
+	randomText_.setFont(*NGin::ResourceCodex::Acquire<sf::Font>("KeepCalm-Medium.ttf"));
+	randomText_.setFillColor(sf::Color(243, 96, 0));
+	randomText_.setString("Randomize NF Files");
+	randomText_.setCharacterSize(18);
+	randomText_.setPosition({ 75, 225 + randomText_.getGlobalBounds().height / 2 + randomText_.getLocalBounds().top });
 
 	/*Table*/
-	header_elem.setPosition({ 25, 350 });
-	header_elem.setSize({ 250, 30 });
-	header_elem.setFillColor(sf::Color(35,35,35));
+	headerShape_.setPosition({ 25, 350 });
+	headerShape_.setSize({ 250, 30 });
+	headerShape_.setFillColor(sf::Color(35,35,35));
 
-	header_txt.setFont(*NGin::ResourceCodex::Acquire<sf::Font>("KeepCalm-Medium.ttf"));
-	header_txt.setCharacterSize(15);
-	header_txt.setFillColor(sf::Color(243, 96, 0));
+	headerText_.setFont(*NGin::ResourceCodex::Acquire<sf::Font>("KeepCalm-Medium.ttf"));
+	headerText_.setCharacterSize(15);
+	headerText_.setFillColor(sf::Color(243, 96, 0));
 
-	for (int i = 0; i < int(table_elem.size()); i++) {
-		table_elem[i].setSize(header_elem.getSize());
-		table_elem[i].setPosition({
-			header_elem.getPosition().x,
-			header_elem.getPosition().y + header_elem.getSize().y * (i + 1)			
+	for (int i = 0; i < int(tableShape_.size()); i++) {
+		tableShape_[i].setSize(headerShape_.getSize());
+		tableShape_[i].setPosition({
+			headerShape_.getPosition().x,
+			headerShape_.getPosition().y + headerShape_.getSize().y * (i + 1)			
 		});
-		table_elem[i].setFillColor(header_elem.getFillColor());
-		table_txt[i].setFont(*header_txt.getFont());
-		table_txt[i].setCharacterSize(header_txt.getCharacterSize() - 1);
-		table_txt[i].setFillColor(header_txt.getFillColor());
-		table_txt[i].setString(Input::getFileName(i) + "   " +
+		tableShape_[i].setFillColor(headerShape_.getFillColor());
+		tableText_[i].setFont(*headerText_.getFont());
+		tableText_[i].setCharacterSize(headerText_.getCharacterSize() - 1);
+		tableText_[i].setFillColor(headerText_.getFillColor());
+		tableText_[i].setString(Input::getFileName(i) + "   " +
 			Input::getStartTime(i) + "-" + Input::getEndTime(i));
-		NGin::offCentTxtInSh(20, table_txt[i], table_elem[i]);
+		NGin::offCentTxtInSh(20, tableText_[i], tableShape_[i]);
 	}
 	
 	loadInOut();
 
 	// sets up the channel volume
-	volume.setLevel(volume_val / max_volume);
+	volumeSlider_.setLevel(volumeValue_ / maxVolume_);
 }
 
 void CPanel::handleEvents(const sf::Event& event)
 {
-	volume.select(NGin::UI::Cursor::getPosition());
-	volume.handleEvents(event);
+	volumeSlider_.select(NGin::UI::Cursor::getPosition());
+	volumeSlider_.handleEvents(event);
 
-	inoutro.select(NGin::UI::Cursor::getPosition());
-	inoutro.handleEvents(event);
+	introSwitcher_.select(NGin::UI::Cursor::getPosition());
+	introSwitcher_.handleEvents(event);
 
-	rand_sw.select(NGin::UI::Cursor::getPosition());
-	rand_sw.handleEvents(event);
+	randomSwitcher_.select(NGin::UI::Cursor::getPosition());
+	randomSwitcher_.handleEvents(event);
 
 	// info-screen toggle
-	if (info_button.getGlobalBounds().intersects({ NGin::UI::Cursor::getPosition(), {1,1} })) {
-		info_button.setTexture(*NGin::ResourceCodex::Acquire<sf::Texture>("nebulogo.png"));
-		info_screen.setColor(sf::Color::White); // show
+	if (infoButton_.getGlobalBounds().intersects({ NGin::UI::Cursor::getPosition(), {1,1} })) {
+		infoButton_.setTexture(*NGin::ResourceCodex::Acquire<sf::Texture>("nebulogo.png"));
+		infoScreen_.setColor(sf::Color::White); // show
 	}
 	else {
-		info_button.setTexture(*NGin::ResourceCodex::Acquire<sf::Texture>("info.png"));
-		info_screen.setColor(sf::Color::Transparent); // hide
+		infoButton_.setTexture(*NGin::ResourceCodex::Acquire<sf::Texture>("info.png"));
+		infoScreen_.setColor(sf::Color::Transparent); // hide
 	}
 
 	// volume adjust
-	if (volume.getLevel() != volume_val / max_volume) {
-		volume_val = volume.getLevel() * max_volume;
+	if (volumeSlider_.getLevel() != volumeValue_ / maxVolume_) {
+		volumeValue_ = volumeSlider_.getLevel() * maxVolume_;
 	}
 }
 
 void CPanel::Update()
 {
-	date_time.setString(NGin::Timer::getSysString());
-	header_txt.setString(NGin::Timer::getSysYMDStr());
-	NGin::offCentTxtInSh(10, header_txt, header_elem);
+	dateTime_.setString(NGin::Timer::getSysString());
 
-	for (int i = 0; i < int(table_elem.size()); i++) {
+	for (int i = 0; i < int(tableShape_.size()); i++) {
 		if (i == Input::getCurrIndex())
 		{
-			table_elem[i].setFillColor(sf::Color(252, 172, 69));
+			tableShape_[i].setFillColor(sf::Color(252, 172, 69));
 		}
 		else {
-			table_elem[i].setFillColor(header_elem.getFillColor());
+			tableShape_[i].setFillColor(headerShape_.getFillColor());
 		}
 	}
 
 	// log switcher stance changes
-	if (inoutro.hasChanged()) {
-		if (inoutro.isActive()) {
+	if (introSwitcher_.hasChanged()) {
+		if (introSwitcher_.isActive()) {
 			NGin::Logger::log("Auto Intro-Outro -- Activated!");
 		}
 		else {
@@ -136,68 +134,74 @@ void CPanel::Update()
 
 void CPanel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.draw(background);
-	target.draw(date_time);
-	target.draw(volume);
-	target.draw(vol_text);
-	target.draw(inoutro);
-	target.draw(inout_txt);
-	target.draw(rand_sw);
-	target.draw(rand_txt);
-	target.draw(info_screen); // only gets drawn if logo is hovered on
-	target.draw(info_button);
+	target.draw(background_);
+	target.draw(dateTime_);
+	target.draw(volumeSlider_);
+	target.draw(volumeText_);
+	target.draw(introSwitcher_);
+	target.draw(introText_);
+	target.draw(randomSwitcher_);
+	target.draw(randomText_);
+	target.draw(infoScreen_); // only gets drawn if logo is hovered on
+	target.draw(infoButton_);
 
-	target.draw(header_elem);
-	target.draw(header_txt);
+	target.draw(headerShape_);
+	target.draw(headerText_);
 
-	for (int i = 0; i < int(table_elem.size()); i++) {
-		target.draw(table_elem[i]);
-		target.draw(table_txt[i]);
+	for (int i = 0; i < int(tableShape_.size()); i++) {
+		target.draw(tableShape_[i]);
+		target.draw(tableText_[i]);
 	}
 }
 
 void CPanel::playIntro(HCHANNEL& channel)
 {
 	BASS_ChannelStop(channel);
-	channel = BASS_SampleGetChannel(intro, FALSE);
-	intro_length = BASS_ChannelGetLength(channel, BASS_POS_BYTE);
+	channel = BASS_SampleGetChannel(introSample_, FALSE);
+	introLength_ = BASS_ChannelGetLength(channel, BASS_POS_BYTE);
 	BASS_ChannelPlay(channel, FALSE);
 }
 
 bool CPanel::introStopped(const HCHANNEL& channel)
 {
-	return (inoutActive() && BASS_ChannelIsActive(channel) != BASS_ACTIVE_PLAYING
-		&& intro_length == BASS_ChannelGetLength(channel, BASS_POS_BYTE));
+	return (introShouldPlay() && BASS_ChannelIsActive(channel) != BASS_ACTIVE_PLAYING
+		&& introLength_ == BASS_ChannelGetLength(channel, BASS_POS_BYTE));
 }
 
 void CPanel::playOutro(HCHANNEL& channel)
 {
 	BASS_ChannelStop(channel);
-	channel = BASS_SampleGetChannel(outro, FALSE);
-	outro_length = BASS_ChannelGetLength(channel, BASS_POS_BYTE);
+	channel = BASS_SampleGetChannel(outroSample_, FALSE);
+	outroLength_ = BASS_ChannelGetLength(channel, BASS_POS_BYTE);
 	BASS_ChannelPlay(channel, FALSE);
 }
 
 bool CPanel::outroStopped(const HCHANNEL& channel)
 {
-	return (inoutActive() && BASS_ChannelIsActive(channel) != BASS_ACTIVE_PLAYING
-		&& outro_length == BASS_ChannelGetLength(channel, BASS_POS_BYTE));
+	return (introShouldPlay() && BASS_ChannelIsActive(channel) != BASS_ACTIVE_PLAYING
+		&& outroLength_ == BASS_ChannelGetLength(channel, BASS_POS_BYTE));
 }
 
 void CPanel::loadInOut()
 {
-	intro = BASS_SampleLoad(false, "input/intro.mp3", 0, 0, 1, BASS_DEVICE_STEREO);
-	if (BASS_ErrorGetCode() != BASS_OK) {
-		NGin::Logger::log("Cannot open intro! - Auto intro/outro DISABLED!", NGin::Logger::Severity::Warning);
-		inoutro.setisActive(false);
-		inoutro.setInactivity(true);
+	introSample_ = BASS_SampleLoad(false, "input/intro.mp3", 0, 0, 1, BASS_DEVICE_STEREO);
+	if (BASS_ErrorGetCode() != BASS_OK)
+	{
+		NGin::Logger::log("Cannot open intro! - Auto intro/outro DISABLED!",
+						   NGin::Logger::Severity::Warning);
+
+		introSwitcher_.setisActive(false);
+		introSwitcher_.setInactivity(true);
 	}
 	else {
-		outro = BASS_SampleLoad(false, "input/outro.mp3", 0, 0, 1, BASS_DEVICE_STEREO);
-		if (BASS_ErrorGetCode() != BASS_OK) {
-			NGin::Logger::log("Cannot open outro! - Auto intro/outro DISABLED!", NGin::Logger::Severity::Warning);
-			inoutro.setisActive(false);
-			inoutro.setInactivity(true);
+		outroSample_ = BASS_SampleLoad(false, "input/outro.mp3", 0, 0, 1, BASS_DEVICE_STEREO);
+		if (BASS_ErrorGetCode() != BASS_OK)
+		{
+			NGin::Logger::log("Cannot open outro! - Auto intro/outro DISABLED!",
+							   NGin::Logger::Severity::Warning);
+
+			introSwitcher_.setisActive(false);
+			introSwitcher_.setInactivity(true);
 		}
 		else {
 			NGin::Logger::log("Intro/Outro loaded successfully!");

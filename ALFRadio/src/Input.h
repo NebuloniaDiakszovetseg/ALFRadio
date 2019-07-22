@@ -12,6 +12,8 @@ public:
 	static unsigned nrofFiles() { return file_names.size(); }
 	// gets the current file's entrie relative path
 	static std::string getCurrFileString();
+	// get the address of current file
+	static std::string getCurrAddress();
 	// signals whenever file index changes
 	static bool hasChanged() { return prev_index != curr_index; }
 	// this should be called whenever input gets loaded

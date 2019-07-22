@@ -1,0 +1,10 @@
+// This file contains the addresses the randomizer should pick from.
+// Path should look like: input/2019.07.17/
+// Place each address in a new line!
+// WARNING: The position of "/" characters is very important!
+
+// Program and filesystem made by Szoke Andras-Lorand ;)
+
+input/2019.07.17/
+input/2019.07.18/
+input/2019.07.19/

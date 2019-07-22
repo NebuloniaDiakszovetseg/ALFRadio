@@ -3,7 +3,7 @@
 #include "NGin/UserInterface.h"
 
 #include "Input.h" // contains file names thet should be loaded
-
+#include "RandomInput.h"
 #include "MPlayer.h"
 #include "CPanel.h"
 

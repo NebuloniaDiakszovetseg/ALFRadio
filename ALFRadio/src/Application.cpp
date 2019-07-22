@@ -34,13 +34,13 @@ void Application::Update(sf::RenderWindow& window)
 
 	// update mPlayer's visuals based on channel's state
 	mPlayer.Update(channel);
-	
+
 	// set volume when cPanel slider changes it
 	BASS_ChannelSetAttribute(channel, BASS_ATTRIB_VOL, cPanel.getVolume());
 
 	// load next sample if current one ends
 	// or exceeds time limit 
-	if(curr_sample_length == BASS_ChannelGetLength(channel, BASS_POS_BYTE) &&
+	if (curr_sample_length == BASS_ChannelGetLength(channel, BASS_POS_BYTE) &&
 		mPlayer.getSeekerPos() >= mPlayer.getChannelLength() * 0.9999f ||
 		Input::getEndTime(Input::getCurrIndex()) == NGin::Timer::getSysHMStr())
 	{
@@ -51,7 +51,7 @@ void Application::Update(sf::RenderWindow& window)
 		}
 
 		// Auto Outro
-		if (cPanel.inoutActive()) {
+		if (cPanel.introShouldPlay()) {
 			cPanel.playOutro(channel);
 			// Continue Playing
 			mPlayer.setPlayActive(true);
@@ -95,7 +95,7 @@ void Application::Update(sf::RenderWindow& window)
 	if (mPlayer.playMusic() && BASS_ChannelIsActive(channel) != BASS_ACTIVE_PLAYING) {
 
 		// Auto Intro
-		if (cPanel.inoutActive() && mPlayer.getSeekerPos() <= mPlayer.getChannelLength() * 0.0001f &&
+		if (cPanel.introShouldPlay() && mPlayer.getSeekerPos() <= mPlayer.getChannelLength() * 0.0001f &&
 			curr_sample_length == BASS_ChannelGetLength(channel, BASS_POS_BYTE))
 		{
 			cPanel.playIntro(channel);
@@ -105,9 +105,9 @@ void Application::Update(sf::RenderWindow& window)
 		if (BASS_ErrorGetCode() == BASS_ERROR_START)
 		{
 			NGin::Logger::log("Error Playing on main channel! -> Please restart the program \n"
-				"->If the error persists, contact me (Szoke Andras-Lorand) at \nhttp://www.nebulonia.ro/creators",
+				"->If the error persists, contact me (Szoke Andras-Lorand) from \nhttp://www.nebulonia.ro/creators",
 				NGin::Logger::Severity::Error);
-			
+
 			system("pause");
 			window.close();
 		}
@@ -120,9 +120,16 @@ void Application::Update(sf::RenderWindow& window)
 	}
 
 	// connect channel pos to seeker
-	if(mPlayer.seekerMoved()){
+	if (mPlayer.seekerMoved()) {
 		BASS_ChannelSetPosition(channel, mPlayer.getSeekerPos(), BASS_POS_BYTE);
 	}
+
+	BASS_DEVICEINFO dinfo;
+	for (int a = 0; BASS_RecordGetDeviceInfo(a, &dinfo); a++)
+		if ((dinfo.flags & BASS_DEVICE_ENABLED) && (dinfo.flags & BASS_DEVICE_TYPE_MASK) == BASS_DEVICE_TYPE_MICROPHONE) { // found an enabled microphone
+			NGin::Logger::log("yay");
+			break;
+		}
 }
 
 void Application::Compose(sf::RenderWindow& window)
@@ -133,25 +140,66 @@ void Application::Compose(sf::RenderWindow& window)
 
 void Application::loadCurrInput()
 {
-	/*Avoid sound collision and free up unused memory*/
+	// Avoid sound collision and free up unused memory*
 	BASS_ChannelPause(channel);
 	BASS_SampleFree(sample);
 
-	/*Convert location from string to wchar* */
+	// Convert location from string to wchar*
 	std::string narrow_string(Input::getCurrFileString());
 	std::wstring wide_string = std::wstring(narrow_string.begin(), narrow_string.end());
 	const wchar_t* location = wide_string.c_str();
 
-	/*load sample with new location*/
+	// Load sample with new location
 	sample = BASS_SampleLoad(false, location, 0, 0, 1, BASS_DEVICE_STEREO);
+	cPanel.setHeaderText(Input::getCurrAddress());
 
-	/*If input file cannot be opened, prompt user and wait for fix*/
-	while (BASS_ErrorGetCode() == BASS_ERROR_FILEOPEN) {
-		NGin::Logger::log(Input::getCurrFileString() + " FILE DOES NOT EXIST! ->"
-			"\nPlease create it then press enter!", NGin::Logger::Severity::Warning);
-		system("pause");
+	// If input file cannot be opened, prompt user and wait for fix
+	int iterator = 0;
+	while (BASS_ErrorGetCode() == BASS_ERROR_FILEOPEN)
+	{
+		NGin::Logger::logOnce(narrow_string + " - FILE DOES NOT EXIST!",
+						  NGin::Logger::Severity::Warning);
+
+		if (cPanel.randomGetActive()) {
+			if (iterator >= 10) {
+				NGin::Logger::log( std::to_string(iterator) + " randomizing attempts failed"
+					" -> disactivated random switch!", NGin::Logger::Severity::Error);
+				cPanel.randomSetActive(false);
+			}
+			else if (iterator > 0) {
+				NGin::Logger::logOnce("Please fix the content of randlist.txt!" , NGin::Logger::Severity::Error);
+			}
+
+			if (RandomInput::readList()) {
+				NGin::Logger::logOnce("Random NF Files Active -> Loading contents of " + RandomInput::getAddress());
+
+				narrow_string = RandomInput::getAddress() + Input::getFileName(Input::getCurrIndex());
+				wide_string = std::wstring(narrow_string.begin(), narrow_string.end());
+				location = wide_string.c_str();
+				cPanel.setHeaderText(RandomInput::getAddress());
+			}
+			else {
+				cPanel.randomSetActive(false);
+
+				NGin::Logger::log("randlist.txt empty or missing -> Randomization disactivated!" ,
+								  NGin::Logger::Severity::Error);
+			}
+		}
+		else {
+			narrow_string = Input::getCurrFileString();
+			wide_string = std::wstring(narrow_string.begin(), narrow_string.end());
+			location = wide_string.c_str();
+
+			NGin::Logger::log("Please create " + Input::getCurrFileString() + " then press enter!",
+							  NGin::Logger::Severity::Warning);
+
+			system("pause");
+		}
+
 		sample = BASS_SampleLoad(false, location, 0, 0, 1, BASS_DEVICE_STEREO);
+		iterator++;
 	}
+
 
 	// signal to user that the file has been loaded successfully
 	NGin::Logger::log(Input::getCurrFileString() + " - Loaded");

@@ -16,6 +16,7 @@
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MPlayer.cpp" />
+    <ClCompile Include="src\RandomInput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NGin\NGin.vcxproj">
@@ -28,6 +29,7 @@
     <ClInclude Include="src\CPanel.h" />
     <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\MPlayer.h" />
+    <ClInclude Include="src\RandomInput.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ALFRadio.rc" />
