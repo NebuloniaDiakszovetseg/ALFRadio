@@ -4,6 +4,13 @@
 #include "bass.h" // mp3 player
 #include "Application.h" // the functions of the application
 
+BOOL CALLBACK RecordProc(HRECORD handle, const void* buffer, DWORD length, void* user)
+{
+	// copy microphone level into Application::microphoneLevel
+	BASS_ChannelGetLevelEx(handle, &Application::microphoneLevel, 0.1f, BASS_LEVEL_MONO);
+	return TRUE;
+}
+
 int main()
 {
 	// initialize music player
@@ -36,6 +43,19 @@ int main()
 	// take first time measurement to not leave 0
 	NGin::Timer::measureSysTime();
 
+	// listen to microphone level
+	int deviceNo = -1;
+	BASS_DEVICEINFO dinfo;
+	for (int a = 0; BASS_RecordGetDeviceInfo(a, &dinfo); a++)
+		if ((dinfo.flags & BASS_DEVICE_ENABLED) && (dinfo.flags & BASS_DEVICE_TYPE_MASK) == BASS_DEVICE_TYPE_MICROPHONE) { // found an enabled microphone
+			deviceNo = a;
+			break;
+		}
+	if (deviceNo >= 0) {
+		BASS_RecordInit(deviceNo); // initialize microphone recording device
+		BASS_RecordStart(44100, 1, MAKELONG(0, 10), RecordProc, 0); // create a recording channel with 10ms period
+	}
+
 	// declare and set up application
 	Application application;
 	application.Setup();
@@ -43,7 +63,7 @@ int main()
 	// signal reaching this point
 	NGin::Logger::log("Aprily Radio - App Started");
 
-	/* APPLLICATION LOOP START*/
+	// APPLLICATION LOOP START
 
 	while (window.isOpen())
 	{
@@ -78,7 +98,7 @@ int main()
 		window.display();
 	}
 
-	/* APPLLICATION LOOP END*/
+	// APPLLICATION LOOP END
 
 	return 0;
 }

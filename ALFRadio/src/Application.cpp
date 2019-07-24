@@ -1,5 +1,7 @@
 #include "Application.h"
 
+float Application::microphoneLevel = 0.0F;
+
 void Application::Setup()
 {
 	cPanel.Setup();
@@ -124,12 +126,24 @@ void Application::Update(sf::RenderWindow& window)
 		BASS_ChannelSetPosition(channel, mPlayer.getSeekerPos(), BASS_POS_BYTE);
 	}
 
-	//BASS_DEVICEINFO dinfo;
-	//for (int a = 0; BASS_RecordGetDeviceInfo(a, &dinfo); a++)
-	//	if ((dinfo.flags & BASS_DEVICE_ENABLED) && (dinfo.flags & BASS_DEVICE_TYPE_MASK) == BASS_DEVICE_TYPE_MICROPHONE) { // found an enabled microphone
-	//		NGin::Logger::log("yay");
-	//		break;
-	//	}
+	if (cPanel.dimOnMicGetActive()) {
+
+		if (microphoneLevel >= 0.2F && !volumeDimmed_) {
+			volumeBackup_ = cPanel.getVolume();
+			cPanel.setVolume(0.15F);
+			volumeDimmed_ = true;
+		}
+		else if (microphoneLevel < 0.3F && volumeDimmed_ && dimTimer_ > 3.0F) {
+			cPanel.setVolume(volumeBackup_);
+			volumeDimmed_ = false;
+			dimTimer_ = 0.0F;
+		}
+
+		if (volumeDimmed_)
+		{
+			dimTimer_ += NGin::Timer::getDeltaTime();
+		}
+	}
 }
 
 void Application::Compose(sf::RenderWindow& window)

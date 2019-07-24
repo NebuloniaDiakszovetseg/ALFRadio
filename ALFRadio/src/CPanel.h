@@ -24,6 +24,7 @@ public:
 		NGin::offCentTxtInSh(10, headerText_, headerShape_);
 	}
 	void randomSetActive(const bool active) { randomSwitcher_.setisActive(active); }
+	void setVolume(const float volumeValue) { volumeSlider_.setLevel(volumeValue / maxVolume_);  volumeValue_ = volumeValue; }
 
 	float getVolume() { return volumeValue_; }
 	void playIntro(HCHANNEL& channel);
@@ -32,6 +33,7 @@ public:
 	bool outroStopped(const HCHANNEL& channel);
 	bool introShouldPlay() { return introSwitcher_.isActive(); }
 	bool randomGetActive() { return randomSwitcher_.isActive(); }
+	bool dimOnMicGetActive() { return dimOnMic_.isActive(); }
 private:
 	/*Unmoving elements*/
 	sf::RectangleShape background_; // background color of the panel

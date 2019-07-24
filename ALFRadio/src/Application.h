@@ -25,12 +25,19 @@ public:
 	void Compose(sf::RenderWindow& window);
 
 	void loadCurrInput();
+
+	// the volume level of microphone in percentage
+	static float microphoneLevel;
 private:
 	MPlayer mPlayer; // music player
 	CPanel cPanel; // control panel
 	
 	// saves today's date to check on it if it changes
 	int today;
+
+	float dimTimer_ = 0.0f;
+	float volumeBackup_ = 1.0f;
+	bool volumeDimmed_ = false;
 
 	/*Actual Music*/
 	// the music file that gets loaded into memory
