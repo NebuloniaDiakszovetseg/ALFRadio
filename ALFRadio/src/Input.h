@@ -19,9 +19,12 @@ public:
 	// this should be called whenever input gets loaded
 	static void isLoaded() { prev_index = curr_index; }
 	static int getCurrIndex() { return curr_index; }
+	static int getPrevIndex() { return prev_index; }
 
 	static std::string getStartTime(int index) { return start_times[index]; }
 	static std::string getEndTime(int index) { return end_times[index]; }
+	static bool getFirstLoad() { return firstLoad_;}
+	static void setFirstLoad(const bool firstLoad) { firstLoad_ = firstLoad; }
 
 	// adds 1 to file index - returns false if fail
 	static bool nextFile();
@@ -35,6 +38,8 @@ private:
 
 	// the index of the current file
 	static int curr_index;
+
+	static bool firstLoad_;
 	
 	// the names of individual files
 	static std::vector<std::string> file_names;

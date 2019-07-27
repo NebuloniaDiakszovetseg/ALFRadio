@@ -2,21 +2,27 @@
 
 int Input::prev_index = 0;
 int Input::curr_index = 0;
-std::vector<std::string> Input::file_names = {"1.szunet.mp3",
+bool Input::firstLoad_ = true;
+
+std::vector<std::string> Input::file_names = {
+										 "0.szunet.mp3",
+										 "1.szunet.mp3",
 										 "2.szunet.mp3",
 										 "3.szunet.mp3",
 										 "4.szunet.mp3",
 										 "5.szunet.mp3",
 										 "6.szunet.mp3"};
 
-std::vector<std::string> Input::start_times = { "08:20",
+std::vector<std::string> Input::start_times = { "14:36",
+											    "08:20",
 												"09:20",
 												"10:20",
 												"11:20",
 												"12:30",
 												"13:30" };
 
-std::vector<std::string> Input::end_times = {"08:32",
+std::vector<std::string> Input::end_times = {"07:31",
+											 "08:32",
 											 "09:32",
 											 "10:32",
 											 "11:42",

@@ -20,7 +20,7 @@ void MPlayer::Setup()
 
 	lengthText_.setFont(*NGin::ResourceCodex::Acquire<sf::Font>("KeepCalm-Medium.ttf"));
 	lengthText_.setCharacterSize(12);
-	lengthText_.setPosition({ 885, 490 });
+	lengthText_.setPosition({ 880, 490 });
 
 	positionText_.setFont(*NGin::ResourceCodex::Acquire<sf::Font>("KeepCalm-Medium.ttf"));
 	positionText_.setCharacterSize(12);
@@ -99,17 +99,20 @@ void MPlayer::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 std::string MPlayer::convertBytes(const HCHANNEL& channel, const QWORD& bytes)
 {
-	double rawLength = BASS_ChannelBytes2Seconds(channel, bytes);
-	int lengthInMin = static_cast<int>(rawLength / 60);
-	int lengthInSec = static_cast<int>(rawLength - (lengthInMin * 60));
+	if (bytes != -1) {
+		double rawLength = BASS_ChannelBytes2Seconds(channel, bytes);
+		int lengthInMin = static_cast<int>(rawLength / 60);
+		int lengthInSec = static_cast<int>(rawLength - (lengthInMin * 60));
 
-	std::string lengthStr = "";
+		std::string lengthStr = "";
 
-	if (lengthInMin < 10) lengthStr = "0" + std::to_string(lengthInMin) + ":";
-	else lengthStr = std::to_string(lengthInMin) + ":";
+		if (lengthInMin < 10) lengthStr = "0" + std::to_string(lengthInMin) + ":";
+		else lengthStr = std::to_string(lengthInMin) + ":";
 
-	if (lengthInSec < 10) lengthStr += "0" + std::to_string(lengthInSec);
-	else lengthStr += std::to_string(lengthInSec);
+		if (lengthInSec < 10) lengthStr += "0" + std::to_string(lengthInSec);
+		else lengthStr += std::to_string(lengthInSec);
 
-	return lengthStr;
+		return lengthStr;
+	}
+	else return "00:00";
 }

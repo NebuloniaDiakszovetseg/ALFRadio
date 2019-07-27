@@ -11,9 +11,11 @@ void CPanel::Setup()
 	dateTime_.setCharacterSize(18);
 	dateTime_.setFillColor(sf::Color(243, 96, 0));
 	
-	infoButton_.setTexture(*NGin::ResourceCodex::Acquire<sf::Texture>("info.png"));
+	infoButton_.setTexture(*NGin::ResourceCodex::Acquire<sf::Texture>("info_button.png"));
 	infoButton_.setPosition({ 20, 20 });
 	infoButton_.setScale({ 0.1f, 0.1f });
+
+	infoScreen_.setTexture(*NGin::ResourceCodex::Acquire<sf::Texture>("info_screen.png"));
 
 	/*Volume*/
 	volumeSlider_.setTexture(*NGin::ResourceCodex::Acquire<sf::Texture>("volume.png"));
@@ -63,7 +65,7 @@ void CPanel::Setup()
 	dimOnMicText_.setPosition({ 75, 280 + dimOnMicText_.getGlobalBounds().height / 2 + dimOnMicText_.getLocalBounds().top });
 
 	/*Table*/
-	headerShape_.setPosition({ 25, 350 });
+	headerShape_.setPosition({ 25, 340 });
 	headerShape_.setSize({ 250, 30 });
 	headerShape_.setFillColor(sf::Color(35,35,35));
 
@@ -112,7 +114,7 @@ void CPanel::handleEvents(const sf::Event& event)
 		infoScreen_.setColor(sf::Color::White); // show
 	}
 	else {
-		infoButton_.setTexture(*NGin::ResourceCodex::Acquire<sf::Texture>("info.png"));
+		infoButton_.setTexture(*NGin::ResourceCodex::Acquire<sf::Texture>("info_button.png"));
 		infoScreen_.setColor(sf::Color::Transparent); // hide
 	}
 
@@ -127,7 +129,7 @@ void CPanel::Update()
 	dateTime_.setString(NGin::Timer::getSysString());
 
 	for (int i = 0; i < int(tableShape_.size()); i++) {
-		if (i == Input::getCurrIndex())
+		if (i == Input::getCurrIndex() && !Input::getFirstLoad())
 		{
 			tableShape_[i].setFillColor(sf::Color(252, 172, 69));
 		}
@@ -168,8 +170,6 @@ void CPanel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(randomText_);
 	target.draw(dimOnMic_);
 	target.draw(dimOnMicText_);
-	target.draw(infoScreen_); // only gets drawn if logo is hovered on
-	target.draw(infoButton_);
 
 	target.draw(headerShape_);
 	target.draw(headerText_);
@@ -178,6 +178,9 @@ void CPanel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		target.draw(tableShape_[i]);
 		target.draw(tableText_[i]);
 	}
+
+	target.draw(infoScreen_); // only gets drawn if logo is hovered on
+	target.draw(infoButton_);
 }
 
 void CPanel::playIntro(HCHANNEL& channel)

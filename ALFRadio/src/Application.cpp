@@ -7,8 +7,6 @@ void Application::Setup()
 	cPanel.Setup();
 	mPlayer.Setup();
 
-	loadCurrInput();
-
 	BASS_ChannelSetAttribute(channel, BASS_ATTRIB_VOL, cPanel.getVolume());
 	today = NGin::Timer::getSys().tm_mday; // save today as current date
 }
@@ -29,6 +27,13 @@ void Application::Update(sf::RenderWindow& window)
 	// reloads files if changed
 	if (Input::hasChanged()) {
 		loadCurrInput();
+	}
+
+	// load if nothing has been loaded yet
+	if (Input::getFirstLoad() && mPlayer.getPlayIsActive()) {
+		loadCurrInput();
+		Input::setFirstLoad(false);
+		mPlayer.setPlayActive(true);
 	}
 
 	// update control panel's visuals based on general app state
@@ -88,9 +93,17 @@ void Application::Update(sf::RenderWindow& window)
 	}
 
 	// Autoplay on Input-given times
-	if (Input::getStartTime(Input::getCurrIndex()) == NGin::Timer::getSysHMStr())
+	if (Input::getStartTime(Input::getCurrIndex()) == NGin::Timer::getSysHMStr()
+		&& !mPlayer.getPlayIsActive() && autoplay)
 	{
 		mPlayer.setPlayActive(true);
+		autoplay = false;
+	}
+
+	// bugfix
+	if (autoDate != NGin::Timer::getSysHMStr()) {
+		autoDate = NGin::Timer::getSysHMStr();
+		autoplay = true;
 	}
 
 	// starts playing the music if it should play
@@ -148,8 +161,8 @@ void Application::Update(sf::RenderWindow& window)
 
 void Application::Compose(sf::RenderWindow& window)
 {
-	window.draw(cPanel);
 	window.draw(mPlayer);
+	window.draw(cPanel);
 }
 
 void Application::loadCurrInput()
@@ -204,10 +217,25 @@ void Application::loadCurrInput()
 			wide_string = std::wstring(narrow_string.begin(), narrow_string.end());
 			location = wide_string.c_str();
 
-			NGin::Logger::log("Please create " + Input::getCurrFileString() + " then press enter!",
-							  NGin::Logger::Severity::Warning);
+			if (!Input::nextFile()) {
+				NGin::Logger::log("Please set up " + Input::getCurrAddress() + " folder properly then press enter!",
+					NGin::Logger::Severity::Warning);
 
-			system("pause");
+				Input::resetFile();
+
+				narrow_string = Input::getCurrFileString();
+				wide_string = std::wstring(narrow_string.begin(), narrow_string.end());
+				location = wide_string.c_str();
+
+				system("pause");
+			}
+			else if(BASS_ErrorGetCode() == BASS_ERROR_FILEOPEN){
+				NGin::Logger::log("Skipping to next file", NGin::Logger::Severity::Warning);
+
+				narrow_string = Input::getCurrFileString();
+				wide_string = std::wstring(narrow_string.begin(), narrow_string.end());
+				location = wide_string.c_str();
+			}
 		}
 
 		sample = BASS_SampleLoad(false, location, 0, 0, 1, BASS_DEVICE_STEREO);

@@ -17,6 +17,8 @@ public:
 			tableShape_.push_back(sf::RectangleShape{});
 			tableText_.push_back(sf::Text{});
 		}
+
+		infoScreen_.setColor(sf::Color::Transparent);
 	}
 
 	void setHeaderText(std::string headerText) {

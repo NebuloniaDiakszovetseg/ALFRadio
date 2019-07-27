@@ -22,6 +22,7 @@ public:
 	void setPlayActive(bool isActive) { play.setisActive(isActive); }
 	bool playMusic() { return play.isActive() && ch_length != -1; }
 	bool stopMusic() { return !play.isActive() && ch_length != -1; }
+	bool getPlayIsActive() { return play.isActive(); }
 private:
 	/*Music Player*/
 	sf::Sprite banner; // the banner above the player's controls

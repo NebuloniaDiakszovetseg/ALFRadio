@@ -39,6 +39,9 @@ private:
 	float volumeBackup_ = 1.0f;
 	bool volumeDimmed_ = false;
 
+	bool autoplay = false;
+	std::string autoDate;
+
 	/*Actual Music*/
 	// the music file that gets loaded into memory
 	HSAMPLE sample{};
