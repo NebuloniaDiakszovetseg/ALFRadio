@@ -177,7 +177,7 @@ void Application::loadCurrInput()
 	const wchar_t* location = wide_string.c_str();
 
 	// Load sample with new location
-	sample = BASS_SampleLoad(false, location, 0, 0, 1, BASS_DEVICE_STEREO);
+	sample = BASS_SampleLoad(false, location, 0, 0, 1, BASS_DEVICE_MONO);
 	cPanel.setHeaderText(Input::getCurrAddress());
 
 	// If input file cannot be opened, prompt user and wait for fix
@@ -230,7 +230,9 @@ void Application::loadCurrInput()
 				system("pause");
 			}
 			else if(BASS_ErrorGetCode() == BASS_ERROR_FILEOPEN){
-				NGin::Logger::log("Skipping to next file", NGin::Logger::Severity::Warning);
+				NGin::Logger::log(Input::getFileName(Input::getCurrIndex()-1)
+					+ " Could not be loaded -> Skipping to next file",
+					NGin::Logger::Severity::Warning);
 
 				narrow_string = Input::getCurrFileString();
 				wide_string = std::wstring(narrow_string.begin(), narrow_string.end());
@@ -238,13 +240,13 @@ void Application::loadCurrInput()
 			}
 		}
 
-		sample = BASS_SampleLoad(false, location, 0, 0, 1, BASS_DEVICE_STEREO);
+		sample = BASS_SampleLoad(false, location, 0, 0, 1, BASS_DEVICE_MONO);
 		iterator++;
 	}
 
 
 	// signal to user that the file has been loaded successfully
-	NGin::Logger::log(Input::getCurrFileString() + " - Loaded");
+	NGin::Logger::log(narrow_string + " - Loaded");
 
 	Input::isLoaded();
 	channel = BASS_SampleGetChannel(sample, FALSE);

@@ -13,7 +13,7 @@ std::vector<std::string> Input::file_names = {
 										 "5.szunet.mp3",
 										 "6.szunet.mp3"};
 
-std::vector<std::string> Input::start_times = { "14:36",
+std::vector<std::string> Input::start_times = { "07:25",
 											    "08:20",
 												"09:20",
 												"10:20",

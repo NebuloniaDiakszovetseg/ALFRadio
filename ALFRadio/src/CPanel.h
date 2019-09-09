@@ -19,6 +19,7 @@ public:
 		}
 
 		infoScreen_.setColor(sf::Color::Transparent);
+		headerText_.setString("Nothing loaded yet");
 	}
 
 	void setHeaderText(std::string headerText) {

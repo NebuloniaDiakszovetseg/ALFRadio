@@ -17,9 +17,9 @@ int main()
 	BASS_Init(-1, 44100, 0, 0, NULL);
 
 	// intialize console
-	NGin::Logger::setConsoleFont({ 18, 18 }, true);
+	/*NGin::Logger::setConsoleFont({ 18, 18 }, true);
 	NGin::Logger::setConsoleSize({ c_width, c_height });
-	NGin::Logger::setConsoleName( con_name );
+	NGin::Logger::setConsoleName( con_name );*/
 
 	// initialize render window
 	sf::RenderWindow window{ sf::VideoMode(w_width, w_height), win_name };

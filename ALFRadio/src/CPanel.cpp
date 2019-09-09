@@ -72,6 +72,7 @@ void CPanel::Setup()
 	headerText_.setFont(*NGin::ResourceCodex::Acquire<sf::Font>("KeepCalm-Medium.ttf"));
 	headerText_.setCharacterSize(15);
 	headerText_.setFillColor(sf::Color(243, 96, 0));
+	NGin::offCentTxtInSh(10, headerText_, headerShape_);
 
 	for (int i = 0; i < int(tableShape_.size()); i++) {
 		tableShape_[i].setSize(headerShape_.getSize());
@@ -213,7 +214,7 @@ bool CPanel::outroStopped(const HCHANNEL& channel)
 
 void CPanel::loadInOut()
 {
-	introSample_ = BASS_SampleLoad(false, "input/intro.mp3", 0, 0, 1, BASS_DEVICE_STEREO);
+	introSample_ = BASS_SampleLoad(false, "input/intro.mp3", 0, 0, 1, BASS_DEVICE_MONO);
 	if (BASS_ErrorGetCode() != BASS_OK)
 	{
 		NGin::Logger::log("Cannot open intro! - Auto intro/outro DISABLED!",
@@ -223,7 +224,7 @@ void CPanel::loadInOut()
 		introSwitcher_.setInactivity(true);
 	}
 	else {
-		outroSample_ = BASS_SampleLoad(false, "input/outro.mp3", 0, 0, 1, BASS_DEVICE_STEREO);
+		outroSample_ = BASS_SampleLoad(false, "input/outro.mp3", 0, 0, 1, BASS_DEVICE_MONO);
 		if (BASS_ErrorGetCode() != BASS_OK)
 		{
 			NGin::Logger::log("Cannot open outro! - Auto intro/outro DISABLED!",
