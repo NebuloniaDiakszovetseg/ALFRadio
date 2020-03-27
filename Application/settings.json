@@ -1,0 +1,62 @@
+{
+    "!comment1": "You can add or remove breaks here and change system settings manually!",
+    "!comment2": "However proceed with caution! Things might break roun' here.",
+    "!comment3": "If things do break delete this file and start program to reset defaults",
+    "!comment4": "For more information contact me, Sz.Lori on social media :D",
+    "0": {
+        "1.start": "7:25",
+        "2.end": "7:31",
+        "file": "0.szunet.mp3"
+    },
+    "1": {
+        "1.start": "8:20",
+        "2.end": "8:32",
+        "file": "1.szunet.mp3"
+    },
+    "2": {
+        "1.start": "9:20",
+        "2.end": "9:32",
+        "file": "2.szunet.mp3"
+    },
+    "3": {
+        "1.start": "10:20",
+        "2.end": "10:32",
+        "file": "3.szunet.mp3"
+    },
+    "4": {
+        "1.start": "11:20",
+        "2.end": "11:42",
+        "file": "4.szunet.mp3"
+    },
+    "5": {
+        "1.start": "12:30",
+        "2.end": "12:42",
+        "file": "5.szunet.mp3"
+    },
+    "6": {
+        "1.start": "13:30",
+        "2.end": "13:42",
+        "file": "6.szunet.mp3"
+    },
+    "7": {
+        "1.start": null
+    },
+    "auto_intro_and_outro": false,
+    "console_window": {
+        "height": 480,
+        "is_disabled": true,
+        "width": 800
+    },
+    "dim_duration_seconds": 1.5,
+    "dim_is_active": false,
+    "dim_threshold": 0.03244274854660034,
+    "dim_volume": 0.013358778320252895,
+    "intro_location": "input/intro.mp3",
+    "maximum_app_volume": 0.08778625726699829,
+    "outro_location": "input/outro.mp3",
+    "render_window": {
+        "height": 480,
+        "width": 800,
+        "window_type": 1
+    }
+}

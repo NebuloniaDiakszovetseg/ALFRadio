@@ -15,84 +15,147 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="NGin\UI\Button.cpp">
+    <ClCompile Include="src\NGin\System\Console.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NGin\UI\Dropdown.cpp">
+    <ClCompile Include="src\NGin\System\Resources.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NGin\Base\Animation.cpp">
+    <ClCompile Include="src\NGin\System\Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NGin\Base\ResourceCodex.cpp">
+    <ClCompile Include="src\NGin\Utilities\Align.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NGin\UI\Slider.cpp">
+    <ClCompile Include="src\NGin\UserInterface\Button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NGin\UI\Switcher.cpp">
+    <ClCompile Include="src\NGin\UserInterface\Cursor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NGin\UI\InputText.cpp">
+    <ClCompile Include="src\NGin\UserInterface\Dropdown.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NGin\Base\Logger.cpp">
+    <ClCompile Include="src\NGin\UserInterface\InputText.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NGin\UI\Cursor.cpp">
+    <ClCompile Include="src\NGin\UserInterface\Slider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NGin\Base\Timer.cpp">
+    <ClCompile Include="src\NGin\UserInterface\Switcher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NGin\Utils\Align.cpp">
+    <ClCompile Include="src\NGin\UserInterface\UIElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NGin\Files\FileReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NGin\Utilities\Bind.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NGin\Utilities\Vectors.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NGin\UserInterface\ScrollBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NGin\Levels\Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NGin\UserInterface\ConfirmDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NGin\Animation\AnimationFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NGin\Animation\AnimationRect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NGin\Audio\Audio.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NGin\RTS\Pathfinding.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="NGin\UI\Button.h">
+    <ClInclude Include="src\NGin\System\Console.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NGin\UserInterface.h">
+    <ClInclude Include="src\NGin\System\Resources.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NGin\UI\Dropdown.h">
+    <ClInclude Include="src\NGin\System\Timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NGin\Base.h">
+    <ClInclude Include="src\NGin\Utilities\Align.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NGin\Base\Animation.h">
+    <ClInclude Include="src\NGin\EntryPoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NGin\Base\ResourceCodex.h">
+    <ClInclude Include="src\NGin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NGin\UI\Slider.h">
+    <ClInclude Include="src\NGin\UserInterface\Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NGin\UI\Switcher.h">
+    <ClInclude Include="src\NGin\UserInterface\Cursor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NGin\UI\InputText.h">
+    <ClInclude Include="src\NGin\UserInterface\Dropdown.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NGin\Base\Logger.h">
+    <ClInclude Include="src\NGin\UserInterface\InputText.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NGin\UI\Cursor.h">
+    <ClInclude Include="src\NGin\UserInterface\Slider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NGin\Utils.h">
+    <ClInclude Include="src\NGin\UserInterface\Switcher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NGin\UI\UIElement.h">
+    <ClInclude Include="src\NGin\UserInterface\UIElement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NGin\Base\Timer.h">
+    <ClInclude Include="src\NGin\Levels\Level.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NGin\Utils\Align.h">
+    <ClInclude Include="src\NGin\Files\FileReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NGin\Files\Json.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NGin\Files\json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NGin\Utilities\Bind.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NGin\Utilities\Vectors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NGin\UserInterface\ScrollBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NGin\Levels\Main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NGin\UserInterface\ConfirmDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NGin\Animation\AnimationFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NGin\Animation\AnimationRect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NGin\Audio\Audio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NGin\RTS\Pathfinding.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -11,34 +11,55 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="NGin\Base\Animation.cpp" />
-    <ClCompile Include="NGin\Base\Logger.cpp" />
-    <ClCompile Include="NGin\Base\ResourceCodex.cpp" />
-    <ClCompile Include="NGin\Base\Timer.cpp" />
-    <ClCompile Include="NGin\UI\Button.cpp" />
-    <ClCompile Include="NGin\UI\Cursor.cpp" />
-    <ClCompile Include="NGin\UI\Dropdown.cpp" />
-    <ClCompile Include="NGin\UI\Slider.cpp" />
-    <ClCompile Include="NGin\UI\Switcher.cpp" />
-    <ClCompile Include="NGin\UI\InputText.cpp" />
-    <ClCompile Include="NGin\Utils\Align.cpp" />
+    <ClCompile Include="src\NGin\Animation\AnimationFile.cpp" />
+    <ClCompile Include="src\NGin\Animation\AnimationRect.cpp" />
+    <ClCompile Include="src\NGin\Audio\Audio.cpp" />
+    <ClCompile Include="src\NGin\Levels\Main.cpp" />
+    <ClCompile Include="src\NGin\RTS\Pathfinding.cpp" />
+    <ClCompile Include="src\NGin\UserInterface\ConfirmDialog.cpp" />
+    <ClCompile Include="src\NGin\UserInterface\ScrollBox.cpp" />
+    <ClCompile Include="src\NGin\Files\FileReader.cpp" />
+    <ClCompile Include="src\NGin\System\Console.cpp" />
+    <ClCompile Include="src\NGin\System\Resources.cpp" />
+    <ClCompile Include="src\NGin\System\Timer.cpp" />
+    <ClCompile Include="src\NGin\UserInterface\Button.cpp" />
+    <ClCompile Include="src\NGin\UserInterface\Cursor.cpp" />
+    <ClCompile Include="src\NGin\UserInterface\Dropdown.cpp" />
+    <ClCompile Include="src\NGin\UserInterface\Slider.cpp" />
+    <ClCompile Include="src\NGin\UserInterface\Switcher.cpp" />
+    <ClCompile Include="src\NGin\UserInterface\InputText.cpp" />
+    <ClCompile Include="src\NGin\UserInterface\UIElement.cpp" />
+    <ClCompile Include="src\NGin\Utilities\Align.cpp" />
+    <ClCompile Include="src\NGin\Utilities\Bind.cpp" />
+    <ClCompile Include="src\NGin\Utilities\Vectors.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="NGin\Base.h" />
-    <ClInclude Include="NGin\Base\Animation.h" />
-    <ClInclude Include="NGin\Base\Logger.h" />
-    <ClInclude Include="NGin\Base\ResourceCodex.h" />
-    <ClInclude Include="NGin\Base\Timer.h" />
-    <ClInclude Include="NGin\UI\Button.h" />
-    <ClInclude Include="NGin\UI\Cursor.h" />
-    <ClInclude Include="NGin\UI\Dropdown.h" />
-    <ClInclude Include="NGin\UI\Slider.h" />
-    <ClInclude Include="NGin\UI\Switcher.h" />
-    <ClInclude Include="NGin\UI\InputText.h" />
-    <ClInclude Include="NGin\UserInterface.h" />
-    <ClInclude Include="NGin\Utils.h" />
-    <ClInclude Include="NGin\Utils\Align.h" />
-    <ClInclude Include="NGin\UI\UIElement.h" />
+    <ClInclude Include="src\NGin\Animation\AnimationFile.h" />
+    <ClInclude Include="src\NGin\Animation\AnimationRect.h" />
+    <ClInclude Include="src\NGin\Audio\Audio.h" />
+    <ClInclude Include="src\NGin\Levels\Main.h" />
+    <ClInclude Include="src\NGin\RTS\Pathfinding.h" />
+    <ClInclude Include="src\NGin\UserInterface\ConfirmDialog.h" />
+    <ClInclude Include="src\NGin\UserInterface\ScrollBox.h" />
+    <ClInclude Include="src\NGin\Files\FileReader.h" />
+    <ClInclude Include="src\NGin\Files\Json.h" />
+    <ClInclude Include="src\NGin\Files\json.hpp" />
+    <ClInclude Include="src\NGin\Levels\Level.h" />
+    <ClInclude Include="src\NGin.h" />
+    <ClInclude Include="src\NGin\System\Console.h" />
+    <ClInclude Include="src\NGin\System\Resources.h" />
+    <ClInclude Include="src\NGin\System\Timer.h" />
+    <ClInclude Include="src\NGin\EntryPoint.h" />
+    <ClInclude Include="src\NGin\UserInterface\Button.h" />
+    <ClInclude Include="src\NGin\UserInterface\Cursor.h" />
+    <ClInclude Include="src\NGin\UserInterface\Dropdown.h" />
+    <ClInclude Include="src\NGin\UserInterface\Slider.h" />
+    <ClInclude Include="src\NGin\UserInterface\Switcher.h" />
+    <ClInclude Include="src\NGin\UserInterface\InputText.h" />
+    <ClInclude Include="src\NGin\Utilities\Align.h" />
+    <ClInclude Include="src\NGin\UserInterface\UIElement.h" />
+    <ClInclude Include="src\NGin\Utilities\Bind.h" />
+    <ClInclude Include="src\NGin\Utilities\Vectors.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\styles\warcraft\button.png" />
@@ -96,7 +117,8 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)vendor\SFML-2.5.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>Default</LanguageStandard>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\SFML-2.5.1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -112,7 +134,8 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)vendor\SFML-2.5.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>Default</LanguageStandard>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
