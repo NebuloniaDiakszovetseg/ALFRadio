@@ -82,7 +82,7 @@ void ControlPanel::setup()
 	dimSwitcherText_.setFillColor(fontColor_);
 	dimTimer_ = Settings::getDimDuration();
 
-	if (!BassPlayer::getCanDim())
+	if (!BassPlayer::microphoneWorks())
 	{
 		Settings::setDimIsActive(false);
 		dimSwitcher_.setIsActive(false);
@@ -131,7 +131,7 @@ void ControlPanel::update()
 	table_.updateColors();
 
 	// if dimming enabled
-	if (Settings::getDimIsActive() && BassPlayer::getCanDim())
+	if (Settings::getDimIsActive() && BassPlayer::microphoneWorks())
 	{
 		// if threshold exceeded
 		if (BassPlayer::getMicrophoneLevel() > Settings::getDimThreshold())
@@ -148,6 +148,11 @@ void ControlPanel::update()
 			volumeBackup_ = -1;
 			dimTimer_ = 0.0F;
 		}
+	}
+	// restore volume after dim deactivated
+	else if (volumeBackup_ != -1) {
+		volumeSlider_.setLevel(volumeBackup_);
+		volumeBackup_ = -1;
 	}
 
 	// adjust volume string to percentage of volume

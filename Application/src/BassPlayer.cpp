@@ -1,23 +1,24 @@
 #include "BassPlayer.h"
+#include "Elements/Notification.h"
 
-std::string BassPlayer::playingFilePath = "";
-bool BassPlayer::playingFilePathChanged = false;
-int BassPlayer::playingFileIndex = -1; // -1 not playing anything
-bool BassPlayer::isPlaying = false;
-bool BassPlayer::wasPlaying = true;
-HSTREAM BassPlayer::mainChannel;
-bool BassPlayer::playingEnded = false;
+std::string BassPlayer::playingFilePath_ = "";
+bool BassPlayer::playingFilePathChanged_ = false;
+int BassPlayer::playingFileIndex_ = -1; // -1 not playing anything
+bool BassPlayer::isPlaying_ = false;
+bool BassPlayer::wasPlaying_ = true;
+HSTREAM BassPlayer::mainChannel_;
+bool BassPlayer::playingEnded_ = false;
 
-bool BassPlayer::introLoaded = false;
-bool BassPlayer::introOutroIsStreaming = false;
-HSAMPLE BassPlayer::introSample;
-bool BassPlayer::outroLoaded = false;
-HSAMPLE BassPlayer::outroSample;
-HCHANNEL BassPlayer::introOutroChannel;
-HRECORD BassPlayer::microphoneHandle;
-float BassPlayer::microphoneLevel = 0.0F;
-int BassPlayer::microphoneDeviceNr = -1;
-bool BassPlayer::microphoneWorks = false;
+bool BassPlayer::introLoaded_ = false;
+bool BassPlayer::introOutroIsStreaming_ = false;
+HSAMPLE BassPlayer::introSample_;
+bool BassPlayer::outroLoaded_ = false;
+HSAMPLE BassPlayer::outroSample_;
+HCHANNEL BassPlayer::introOutroChannel_;
+HRECORD BassPlayer::microphoneHandle_;
+float BassPlayer::microphoneLevel_ = 0.0F;
+int BassPlayer::microphoneDeviceNr_ = -1;
+bool BassPlayer::microphoneWorks_ = false;
 
 void BassPlayer::setPlayingFile(const int settingsIndex)
 {
@@ -26,78 +27,78 @@ void BassPlayer::setPlayingFile(const int settingsIndex)
 		NG_LOG_WARN("Playing file not set! Unexpected behaviour might occur!");
 	}
 	else {
-		playingFileIndex = settingsIndex;
-		playingFilePathChanged = true;
+		playingFileIndex_ = settingsIndex;
+		playingFilePathChanged_ = true;
 	}
 }
 
 void BassPlayer::prev()
 {
-	if (playingFileIndex > 0) {
-		playingFileIndex--;
-		playingFilePathChanged = true;
+	if (playingFileIndex_ > 0) {
+		playingFileIndex_--;
+		playingFilePathChanged_ = true;
 	}
 }
 
 void BassPlayer::next()
 {
-	if (playingFileIndex + 1 < static_cast<int>(Settings::getNumOfFiles()))
+	if (playingFileIndex_ + 1 < static_cast<int>(Settings::getNumOfFiles()))
 	{
-		playingFileIndex++;
-		playingFilePathChanged = true;
+		playingFileIndex_++;
+		playingFilePathChanged_ = true;
 	}
 }
 
 bool BassPlayer::playbackHasEnded()
 {
-	return playingEnded;
+	return playingEnded_;
 }
 
 std::string BassPlayer::getCurrentPositionString()
 {
-	if (introOutroIsStreaming)
-		return bytesToStringTime(BASS_ChannelGetPosition(introOutroChannel, BASS_POS_BYTE));
+	if (introOutroIsStreaming_)
+		return bytesToStringTime(BASS_ChannelGetPosition(introOutroChannel_, BASS_POS_BYTE));
 	else
-		return bytesToStringTime(BASS_ChannelGetPosition(mainChannel, BASS_POS_BYTE));
+		return bytesToStringTime(BASS_ChannelGetPosition(mainChannel_, BASS_POS_BYTE));
 }
 
 std::string BassPlayer::getLengthString()
 {
-	if (introOutroIsStreaming)
-		return "~" + bytesToStringTime(BASS_ChannelGetLength(introOutroChannel, BASS_POS_BYTE));
+	if (introOutroIsStreaming_)
+		return "~" + bytesToStringTime(BASS_ChannelGetLength(introOutroChannel_, BASS_POS_BYTE));
 	else
-		return "~" + bytesToStringTime(BASS_ChannelGetLength(mainChannel, BASS_POS_BYTE));
+		return "~" + bytesToStringTime(BASS_ChannelGetLength(mainChannel_, BASS_POS_BYTE));
 }
 
 void BassPlayer::setPercentagePlayed(const float percent)
 {
-	if (introOutroIsStreaming)
+	if (introOutroIsStreaming_)
 	{
-		auto length = BASS_ChannelGetLength(introOutroChannel, BASS_POS_BYTE);
+		auto length = BASS_ChannelGetLength(introOutroChannel_, BASS_POS_BYTE);
 
 		QWORD position = static_cast<QWORD>(length * static_cast<double>(percent));
-		BASS_ChannelSetPosition(introOutroChannel, position, BASS_POS_BYTE);
+		BASS_ChannelSetPosition(introOutroChannel_, position, BASS_POS_BYTE);
 	}
 	else {
-		auto length = BASS_ChannelGetLength(mainChannel, BASS_POS_BYTE);
+		auto length = BASS_ChannelGetLength(mainChannel_, BASS_POS_BYTE);
 
 		QWORD position = static_cast<QWORD>(length * static_cast<double>(percent));
-		BASS_ChannelSetPosition(mainChannel, position, BASS_POS_BYTE);
+		BASS_ChannelSetPosition(mainChannel_, position, BASS_POS_BYTE);
 	}
 }
 
 float BassPlayer::getPercentagePlayed()
 {
-	if (introOutroIsStreaming)
+	if (introOutroIsStreaming_)
 	{
 		// make sure the saved channel length is right
 		double length = 
-			static_cast<double>(BASS_ChannelGetLength(introOutroChannel, BASS_POS_BYTE));
+			static_cast<double>(BASS_ChannelGetLength(introOutroChannel_, BASS_POS_BYTE));
 		double position = 
-			static_cast<double>(BASS_ChannelGetPosition(introOutroChannel, BASS_POS_BYTE));
+			static_cast<double>(BASS_ChannelGetPosition(introOutroChannel_, BASS_POS_BYTE));
 
-		if (BASS_ChannelGetLength(introOutroChannel, BASS_POS_BYTE) == -1 ||
-			BASS_ChannelGetPosition(introOutroChannel, BASS_POS_BYTE) == -1)
+		if (BASS_ChannelGetLength(introOutroChannel_, BASS_POS_BYTE) == -1 ||
+			BASS_ChannelGetPosition(introOutroChannel_, BASS_POS_BYTE) == -1)
 		{
 			return 0.0F;
 		}
@@ -108,12 +109,12 @@ float BassPlayer::getPercentagePlayed()
 	{
 		// make sure the saved channel length is right
 		double length = 
-			static_cast<double>(BASS_ChannelGetLength(mainChannel, BASS_POS_BYTE));
+			static_cast<double>(BASS_ChannelGetLength(mainChannel_, BASS_POS_BYTE));
 		double position = 
-			static_cast<double>(BASS_ChannelGetPosition(mainChannel, BASS_POS_BYTE));
+			static_cast<double>(BASS_ChannelGetPosition(mainChannel_, BASS_POS_BYTE));
 
-		if (BASS_ChannelGetLength(mainChannel, BASS_POS_BYTE) == -1 ||
-			BASS_ChannelGetPosition(mainChannel, BASS_POS_BYTE) == -1)
+		if (BASS_ChannelGetLength(mainChannel_, BASS_POS_BYTE) == -1 ||
+			BASS_ChannelGetPosition(mainChannel_, BASS_POS_BYTE) == -1)
 		{
 			return 0.0F;
 		}
@@ -125,44 +126,57 @@ float BassPlayer::getPercentagePlayed()
 void BassPlayer::setup()
 {
 	BASS_Init(-1, 44100, BASS_DEVICE_MONO, ng::Main::getWindowHandle(), NULL);
+	if (BASS_ErrorGetCode() != BASS_OK)
+	{
+		NG_LOG_ERROR("Error! Failed to initialize sound output!");
+		NG_LOG_ERROR("BASS ERROR CODE: ", BASS_ErrorGetCode());
+		NG_LOG_NOTE("Go to audio devices in start menu and check if output device"
+			" is enabled");
 
-	introSample = 
+		Notification::popup("Error!",
+			"                  Sound output failed to initialize!\n"
+			"Please check if there is a proper audio output device!");
+
+		ng::Main::closeWindow();
+	}
+
+	introSample_ = 
 		BASS_SampleLoad(false, Settings::getIntroLocation().c_str(), 0, 0, 1, BASS_DEVICE_MONO);
-	introLoaded = (introSample != 0); // condition of loading going well
+	introLoaded_ = (introSample_ != 0); // condition of loading going well
 
-	outroSample =
+	outroSample_ =
 		BASS_SampleLoad(false, Settings::getOutroLocation().c_str(), 0, 0, 1, BASS_DEVICE_MONO);
-	outroLoaded = (outroSample != 0);
+	outroLoaded_ = (outroSample_ != 0);
 
 	// --- Initialize microphone START ------------------------------
-	microphoneDeviceNr = -1;
+	microphoneDeviceNr_ = -1;
 	BASS_DEVICEINFO dinfo;
 	// find an enabled microphone
 	for (int a = 0; BASS_RecordGetDeviceInfo(a, &dinfo); a++) {
 		if ((dinfo.flags & BASS_DEVICE_ENABLED) &&
 			(dinfo.flags & BASS_DEVICE_TYPE_MASK) == BASS_DEVICE_TYPE_MICROPHONE)
 		{
-			microphoneDeviceNr = a;
+			microphoneDeviceNr_ = a;
 			break;
 		}
 	}
 
-	microphoneWorks = true;
-	if (microphoneDeviceNr >= 0) {
+	microphoneWorks_ = true;
+	if (microphoneDeviceNr_ >= 0) {
 		// initialize microphone recording device
-		BASS_RecordInit(microphoneDeviceNr);
+		BASS_RecordInit(microphoneDeviceNr_);
 		// create a recording channel with 10ms period
-		microphoneHandle = BASS_RecordStart(44100, 1, MAKELONG(0, 10), NULL, 0);
+		microphoneHandle_ = BASS_RecordStart(44100, 1, MAKELONG(0, 10), NULL, 0);
 	
 		if (BASS_ErrorGetCode() != BASS_OK)
 		{
-			microphoneWorks = false;
+			microphoneWorks_ = false;
 			NG_LOG_WARN("Error initializing microphone!");
 			NG_LOG_WARN("Dim if microphone active function disabled!");
 		}
 	}
 	else {
-		microphoneWorks = false;
+		microphoneWorks_ = false;
 		NG_LOG_WARN("Cannot initialize microphone! No enabled device found!");
 		NG_LOG_WARN("Dim if microphone active function disabled!");
 	}
@@ -179,22 +193,22 @@ void BassPlayer::update()
 		NG_LOG_NOTE("Output device has been changed!");
 	}*/
 
-	if(microphoneWorks)
+	if(microphoneWorks_)
 		measureMicLevel();
 
 	// Load File
-	if (playingFilePathChanged)
+	if (playingFilePathChanged_)
 	{
-		playingFilePathChanged = false;
+		playingFilePathChanged_ = false;
 
-		BASS_ChannelStop(introOutroChannel);
-		introOutroIsStreaming = false;
+		BASS_ChannelStop(introOutroChannel_);
+		introOutroIsStreaming_ = false;
 
-		BASS_ChannelStop(mainChannel);
+		BASS_ChannelStop(mainChannel_);
 
-		playingFilePath = Settings::getFilePath(playingFileIndex);
-		const void* file = playingFilePath.c_str();
-		mainChannel = BASS_StreamCreateFile(FALSE, file, 0, 0, 0);
+		playingFilePath_ = Settings::getFilePath(playingFileIndex_);
+		const void* file = playingFilePath_.c_str();
+		mainChannel_ = BASS_StreamCreateFile(FALSE, file, 0, 0, 0);
 
 		auto errorCode = BASS_ErrorGetCode();
 		if (errorCode == BASS_ERROR_FILEOPEN) {
@@ -206,112 +220,112 @@ void BassPlayer::update()
 		}
 
 		// if it was playing keep playing = send a "fake" signal into play logic
-		if (isPlaying) {
-			wasPlaying = false;
+		if (isPlaying_) {
+			wasPlaying_ = false;
 		}
 	}
 
 	// stop or play outro if the end of file has been reached
-	if (BASS_ChannelGetPosition(mainChannel, BASS_POS_BYTE) >=
-		BASS_ChannelGetLength(mainChannel, BASS_POS_BYTE) &&
-		BASS_ChannelGetLength(mainChannel, BASS_POS_BYTE) != -1)
+	if (BASS_ChannelGetPosition(mainChannel_, BASS_POS_BYTE) >=
+		BASS_ChannelGetLength(mainChannel_, BASS_POS_BYTE) &&
+		BASS_ChannelGetLength(mainChannel_, BASS_POS_BYTE) != -1)
 	{
-		BASS_ChannelPause(mainChannel);
-		BASS_ChannelSetPosition(mainChannel, 0, BASS_POS_BYTE);
+		BASS_ChannelPause(mainChannel_);
+		BASS_ChannelSetPosition(mainChannel_, 0, BASS_POS_BYTE);
 
 		// start playing outro
 		if (Settings::getAutoIntroOutro()) {
 			streamOutro();
 		}
 		else {
-			playingEnded = true;
+			playingEnded_ = true;
 			pause();
 		}
 	}
 	else {
-		playingEnded = false;
+		playingEnded_ = false;
 	}
 
 	// make sure disabling intro/outro on the fly resets everything properly
-	if (!Settings::getAutoIntroOutro() && introOutroIsStreaming) {
-		introOutroIsStreaming = false;
-		BASS_ChannelStop(introOutroChannel);
+	if (!Settings::getAutoIntroOutro() && introOutroIsStreaming_) {
+		introOutroIsStreaming_ = false;
+		BASS_ChannelStop(introOutroChannel_);
 
 		// intro && if it was playing
-		if (isPlaying) {
-			if (BASS_ChannelGetPosition(mainChannel, BASS_POS_BYTE) == 2)
+		if (isPlaying_) {
+			if (BASS_ChannelGetPosition(mainChannel_, BASS_POS_BYTE) == 2)
 			{
 				// keep playing = send a "fake" signal into play logic
-				wasPlaying = false;
+				wasPlaying_ = false;
 			}
-			else if (BASS_ChannelGetPosition(mainChannel, BASS_POS_BYTE) == 0)
+			else if (BASS_ChannelGetPosition(mainChannel_, BASS_POS_BYTE) == 0)
 			{
 				// stop playing
-				playingEnded = true;
+				playingEnded_ = true;
 				pause();
 			}
 		}
 	}
 
 	// resume playing main channel after intro/outro finished
-	if (isPlaying && introOutroIsStreaming &&
-		BASS_ChannelIsActive(introOutroChannel) != BASS_ACTIVE_PLAYING &&
-		BASS_ChannelGetPosition(introOutroChannel, BASS_POS_BYTE) == 0)
+	if (isPlaying_ && introOutroIsStreaming_ &&
+		BASS_ChannelIsActive(introOutroChannel_) != BASS_ACTIVE_PLAYING &&
+		BASS_ChannelGetPosition(introOutroChannel_, BASS_POS_BYTE) == 0)
 	{
-		introOutroIsStreaming = false;
-		BASS_ChannelStop(introOutroChannel);
+		introOutroIsStreaming_ = false;
+		BASS_ChannelStop(introOutroChannel_);
 
 		// resume after intro
-		if (BASS_ChannelGetPosition(mainChannel, BASS_POS_BYTE) == 2)
+		if (BASS_ChannelGetPosition(mainChannel_, BASS_POS_BYTE) == 2)
 		{
-			BASS_ChannelPlay(mainChannel, FALSE);
+			BASS_ChannelPlay(mainChannel_, FALSE);
 			play();
 		}
 		// resume after outro
-		else if (BASS_ChannelGetPosition(mainChannel, BASS_POS_BYTE) == 0)
+		else if (BASS_ChannelGetPosition(mainChannel_, BASS_POS_BYTE) == 0)
 		{
-			playingEnded = true;
+			playingEnded_ = true;
 			pause();
 		}
 	}
 
 	// Play Toggle
-	if (isPlaying && !wasPlaying)
+	if (isPlaying_ && !wasPlaying_)
 	{
 		// intro should resume
-		if (introOutroIsStreaming) {
-			BASS_ChannelPlay(introOutroChannel, FALSE);
+		if (introOutroIsStreaming_) {
+			BASS_ChannelPlay(introOutroChannel_, FALSE);
 		}
 		// if intro should play because playing has just been started
 		else if (Settings::getAutoIntroOutro() &&
-			BASS_ChannelGetPosition(mainChannel, BASS_POS_BYTE) == 0)
+			BASS_ChannelGetPosition(mainChannel_, BASS_POS_BYTE) == 0)
 		{
-			BASS_ChannelPause(mainChannel);
+			BASS_ChannelPause(mainChannel_);
 			// miss first two bytes to signal playing the intro
-			BASS_ChannelSetPosition(mainChannel, 2, BASS_POS_BYTE);
+			BASS_ChannelSetPosition(mainChannel_, 2, BASS_POS_BYTE);
 
 			streamIntro();
 		}
 		else {
-			introOutroIsStreaming = false;
-			BASS_ChannelPlay(mainChannel, FALSE);
+			introOutroIsStreaming_ = false;
+			BASS_ChannelPlay(mainChannel_, FALSE);
 		}
 	}
 	// Pause Toggle
-	else if (!isPlaying && wasPlaying)
+	else if (!isPlaying_ && wasPlaying_)
 	{
-		if (introOutroIsStreaming)
-			BASS_ChannelPause(introOutroChannel);
+		if (introOutroIsStreaming_)
+			BASS_ChannelPause(introOutroChannel_);
 		
-		BASS_ChannelPause(mainChannel);
+		BASS_ChannelPause(mainChannel_);
 	}
 
 }
 
 void BassPlayer::setVolume(const float percent)
 {
-	BASS_ChannelSetAttribute(mainChannel, BASS_ATTRIB_VOL, percent);
-	BASS_ChannelSetAttribute(introOutroChannel, BASS_ATTRIB_VOL, percent);
+	BASS_ChannelSetAttribute(mainChannel_, BASS_ATTRIB_VOL, percent);
+	BASS_ChannelSetAttribute(introOutroChannel_, BASS_ATTRIB_VOL, percent);
 }
 
 std::string BassPlayer::bassVersionText()
@@ -340,28 +354,28 @@ std::string BassPlayer::bassVersionText()
 
 void BassPlayer::streamIntro()
 {
-	if (BASS_ChannelIsActive(introOutroChannel) != BASS_ACTIVE_PLAYING)
+	if (BASS_ChannelIsActive(introOutroChannel_) != BASS_ACTIVE_PLAYING)
 	{
-		introOutroChannel = BASS_SampleGetChannel(introSample, FALSE);
-		BASS_ChannelPlay(introOutroChannel, FALSE);
-		introOutroIsStreaming = true;
+		introOutroChannel_ = BASS_SampleGetChannel(introSample_, FALSE);
+		BASS_ChannelPlay(introOutroChannel_, FALSE);
+		introOutroIsStreaming_ = true;
 	}
 }
 
 void BassPlayer::streamOutro()
 {
-	if (BASS_ChannelIsActive(introOutroChannel) != BASS_ACTIVE_PLAYING)
+	if (BASS_ChannelIsActive(introOutroChannel_) != BASS_ACTIVE_PLAYING)
 	{
-		introOutroChannel = BASS_SampleGetChannel(outroSample, FALSE);
-		BASS_ChannelPlay(introOutroChannel, FALSE);
-		introOutroIsStreaming = true;
+		introOutroChannel_ = BASS_SampleGetChannel(outroSample_, FALSE);
+		BASS_ChannelPlay(introOutroChannel_, FALSE);
+		introOutroIsStreaming_ = true;
 	}
 }
 
 std::string BassPlayer::bytesToStringTime(QWORD bytes)
 {
 	if (bytes != -1) { // if successfull
-		double rawLength = BASS_ChannelBytes2Seconds(mainChannel, bytes);
+		double rawLength = BASS_ChannelBytes2Seconds(mainChannel_, bytes);
 		long long lengthInMin = static_cast<int>(rawLength / 60);
 		long long lengthInSec = static_cast<int>(rawLength - (lengthInMin * 60));
 
@@ -382,7 +396,7 @@ void BassPlayer::measureMicLevel()
 {
 	const DWORD maxLevel = 32768;
 
-	DWORD level = BASS_ChannelGetLevel(microphoneHandle);
+	DWORD level = BASS_ChannelGetLevel(microphoneHandle_);
 	// get left channel only (it is mono so it doesn't matter)
 	level = LOWORD(level);
 
@@ -390,12 +404,12 @@ void BassPlayer::measureMicLevel()
 	if (level == -1) {
 		NG_LOG_WARN("Cannot record microphone! Recording disabled!");
 		NG_LOG_WARN("BASS ERROR CODE: ", BASS_ErrorGetCode());
-		microphoneWorks = false;
+		microphoneWorks_ = false;
 	}
 	else {
-		if (level == 0) microphoneLevel = 0;
+		if (level == 0) microphoneLevel_ = 0;
 		else {
-			BassPlayer::microphoneLevel =
+			BassPlayer::microphoneLevel_ =
 				static_cast<float>(level) / static_cast<float>(maxLevel);
 		}
 	}

@@ -3,8 +3,12 @@
 #include "NGin.h"
 #include "bass.h"
 
+// static classes
 #include "BassPlayer.h"
 #include "Settings.h"
+#include "Elements/Notification.h"
+
+#include "SettingsUI.h"
 #include "MusicPlayer.h"
 #include "ControlPanel.h"
 
@@ -26,7 +30,7 @@ private:
 	const std::string windowIconString_ = "icon.png";
 	const unsigned frameRateLimit_ = 60;
 
-	Settings settings_;
+	SettingsUI settingsUI_;
 	ControlPanel controlPanel_;
 	MusicPlayer musicPlayer_;
 };

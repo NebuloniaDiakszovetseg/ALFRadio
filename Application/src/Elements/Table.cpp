@@ -2,19 +2,12 @@
 #include "../Settings.h"
 #include <fstream>
 #include "../BassPlayer.h"
+#include "Notification.h"
 
 Table::Table(sf::Vector2f size, sf::Vector2f position)
 {
 	size_ = size;
 	position_ = position;
-
-	confirmDialog_.setSize(confirmDialogSize_);
-	confirmDialog_.setShapeColor(confirmDialogBgColor_);
-	confirmDialog_.setFont(NG_FONT(fontTypeLocation_));
-	confirmDialog_.setAllTextColor(fontColor_);
-	confirmDialog_.setCharacterSize(confirmDialogFontSize_);
-	confirmDialog_.setButtonTexture(NG_TEXTURE(buttonTextureLoc_));
-	confirmDialog_.setTextYOffset(confirmDialogTextYOffset_);
 }
 
 void Table::handleEvents(const sf::Event& event, const sf::Vector2f& mouse)
@@ -73,11 +66,9 @@ void Table::create()
 	// error
 	if (rowButton_.size() != Settings::getNumOfFiles())
 	{
-		confirmDialog_.setString(
+		Notification::popup("Error!", 
 			"Something went terribly wrong while creating table!\n"
 			"Please contact Szoke Andras-Lorand to fix this issue!");
-		confirmDialog_.setIsActive(true);
-		confirmDialog_.drawInWindow("Error!");
 
 		ng::Main::closeWindow();
 	}

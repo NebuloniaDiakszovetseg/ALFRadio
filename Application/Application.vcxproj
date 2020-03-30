@@ -88,9 +88,11 @@
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\BassPlayer.cpp" />
     <ClCompile Include="src\ControlPanel.cpp" />
+    <ClCompile Include="src\Elements\Notification.cpp" />
     <ClCompile Include="src\Settings.cpp" />
     <ClCompile Include="src\MusicPlayer.cpp" />
     <ClCompile Include="src\Elements\Table.cpp" />
+    <ClCompile Include="src\SettingsUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NGin\NGin.vcxproj">
@@ -102,9 +104,11 @@
     <ClInclude Include="src\Application.h" />
     <ClInclude Include="src\BassPlayer.h" />
     <ClInclude Include="src\ControlPanel.h" />
+    <ClInclude Include="src\Elements\Notification.h" />
     <ClInclude Include="src\MusicPlayer.h" />
     <ClInclude Include="src\Settings.h" />
     <ClInclude Include="src\Elements\Table.h" />
+    <ClInclude Include="src\SettingsUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Application.rc" />

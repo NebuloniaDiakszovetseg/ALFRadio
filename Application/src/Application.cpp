@@ -10,8 +10,12 @@ Application::Application()
 	NG_LOG_INFO("NGin Version: ", NG_VERSION_MAJOR,
 		".", NG_VERSION_MINOR, ".", NG_VERSION_PATCH);
 
+	NG_LOG_NOTE("App by Szoke Andras-Lorand");
+
 	ng::Main::setWindowIcon(windowIconString_);
 	ng::Main::window.setFramerateLimit(frameRateLimit_);
+
+	Notification::setup();
 
 	Settings::load();
 
@@ -31,7 +35,8 @@ Application::Application()
 	ng::Main::view = sf::View{ {0, 0, VIEW_WIDTH, VIEW_HEIGHT} };
 
 	BassPlayer::setup();
-	settings_.setup();
+
+	settingsUI_.setup();
 	musicPlayer_.setup();
 	controlPanel_.setup();
 }
@@ -44,14 +49,14 @@ Application::~Application()
 
 void Application::handleEvents()
 {
-	settings_.handleEvents(event_);
+	settingsUI_.handleEvents(event_);
 	controlPanel_.handleEvents(event_);
 	musicPlayer_.handleEvents(event_);
 }
 
 void Application::update()
 {
-	settings_.update();
+	settingsUI_.update();
 	controlPanel_.update();
 	musicPlayer_.update();
 
@@ -61,6 +66,6 @@ void Application::update()
 void Application::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(musicPlayer_);
-	target.draw(settings_);
+	target.draw(settingsUI_);
 	target.draw(controlPanel_);
 }

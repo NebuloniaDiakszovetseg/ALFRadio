@@ -13,22 +13,22 @@ public:
 	static void close() { BASS_Free(); }
 
 	// gets index of file currently playing
-	static int getPlayingFileIndex() { return playingFileIndex; }
+	static int getPlayingFileIndex() { return playingFileIndex_; }
 
 	// gets the index in settings of the file that has to be played
 	static void setPlayingFile(const int settingsIndex);
 	static void setVolume(const float percent);
-	static bool introIsLoaded() { return introLoaded; }
-	static bool outroIsLoaded() { return outroLoaded; }
-	static bool getCanDim() { return microphoneWorks; }
+	static bool introIsLoaded() { return introLoaded_; }
+	static bool outroIsLoaded() { return outroLoaded_; }
+	static bool microphoneWorks() { return microphoneWorks_; }
 
-	static void play() { wasPlaying = isPlaying; isPlaying = true; }
-	static void pause() { wasPlaying = isPlaying; isPlaying = false; }
+	static void play() { wasPlaying_ = isPlaying_; isPlaying_ = true; }
+	static void pause() { wasPlaying_ = isPlaying_; isPlaying_ = false; }
 
 	static void prev();
 	static void next();
 
-	static float getMicrophoneLevel() { return microphoneLevel; }
+	static float getMicrophoneLevel() { return microphoneLevel_; }
 
 	// signals the end of playback to music player
 	static bool playbackHasEnded();
@@ -42,7 +42,7 @@ public:
 	// returns how many percents of the song were played (in float 1-100% 0-0%)
 	static float getPercentagePlayed();
 
-	static bool getIsPlaying() { return isPlaying; }
+	static bool isPlaying() { return isPlaying_; }
 
 	static std::string bassVersionText();
 private:
@@ -52,26 +52,26 @@ private:
 	// converts bytes into mm:ss string format
 	static std::string bytesToStringTime(QWORD bytes);
 
-	static int playingFileIndex;
-	static bool isPlaying;
-	static bool wasPlaying;
+	static int playingFileIndex_;
+	static bool isPlaying_;
+	static bool wasPlaying_;
 
-	static std::string playingFilePath;
-	static bool playingFilePathChanged;
+	static std::string playingFilePath_;
+	static bool playingFilePathChanged_;
 
-	static HSTREAM mainChannel; // Handle for open stream
-	static bool playingEnded;
+	static HSTREAM mainChannel_; // Handle for open stream
+	static bool playingEnded_;
 
-	static bool introOutroIsStreaming;
-	static HCHANNEL introOutroChannel;
-	static HSAMPLE introSample;  // piece getting played before break
-	static bool introLoaded;
-	static HSAMPLE outroSample; // piece gtting played after break
-	static bool outroLoaded;
+	static bool introOutroIsStreaming_;
+	static HCHANNEL introOutroChannel_;
+	static HSAMPLE introSample_;  // piece getting played before break
+	static bool introLoaded_;
+	static HSAMPLE outroSample_; // piece gtting played after break
+	static bool outroLoaded_;
 
-	static HRECORD microphoneHandle;
+	static HRECORD microphoneHandle_;
 	static void measureMicLevel();
-	static float microphoneLevel;
-	static int microphoneDeviceNr;
-	static bool microphoneWorks;
+	static float microphoneLevel_;
+	static int microphoneDeviceNr_;
+	static bool microphoneWorks_;
 };

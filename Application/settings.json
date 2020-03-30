@@ -44,19 +44,19 @@
     "auto_intro_and_outro": false,
     "console_window": {
         "height": 480,
-        "is_disabled": true,
+        "is_disabled": false,
         "width": 800
     },
     "dim_duration_seconds": 1.5,
     "dim_is_active": false,
-    "dim_threshold": 0.03244274854660034,
-    "dim_volume": 0.013358778320252895,
+    "dim_threshold": 0.20000000298023224,
+    "dim_volume": 0.20000000298023224,
     "intro_location": "input/intro.mp3",
-    "maximum_app_volume": 0.08778625726699829,
+    "maximum_app_volume": 0.5,
     "outro_location": "input/outro.mp3",
     "render_window": {
-        "height": 480,
-        "width": 800,
+        "height": 576,
+        "width": 1024,
         "window_type": 1
     }
 }

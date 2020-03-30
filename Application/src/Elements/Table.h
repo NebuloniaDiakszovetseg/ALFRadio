@@ -20,7 +20,6 @@ private:
 	sf::Vector2f position_; // position of the table(top-left)
 	sf::Vector2f size_; // size of the whole table
 
-	const std::string buttonTextureLoc_ = "button.png";
 	const std::string fontTypeLocation_ = "arial_font.ttf";
 	const sf::Color fontColor_{ 243, 96, 0 };
 
@@ -29,15 +28,6 @@ private:
 	sf::Color pressedSelectColor_{ 243, 96, 0 };
 	sf::Color selectColor_{ 255,255,255 };
 	const float outlineThickness_ = -2.5F;
-
-	// --- Error confirm dialog -------------
-	const sf::Vector2f confirmDialogSize_{ 775.0F, 250.0F };
-	const sf::Color confirmDialogBgColor_ = { 60, 60, 60 };
-	const float confirmDialogTextYOffset_ = -30;
-	const unsigned confirmDialogFontSize_ = 30;
-
-	ng::ConfirmDialog confirmDialog_{
-		ng::ConfirmDialog::DIALOG_TYPE::DIALOG_CLOSE_ONLY};
 
 	// --- File States -----------------------
 	enum class FILE_STATE {

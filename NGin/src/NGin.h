@@ -34,7 +34,7 @@
 // --- User Interface -----------
 #include "NGin/UserInterface/Button.h"
 #include "NGin/UserInterface/Cursor.h"
-#include "NGin/UserInterface/ConfirmDialog.h"
+#include "NGin/UserInterface/ConfirmDialog.h" // includes Button.h
 #include "NGin/UserInterface/Dropdown.h"
 #include "NGin/UserInterface/InputText.h"
 #include "NGin/UserInterface/ScrollBox.h"
