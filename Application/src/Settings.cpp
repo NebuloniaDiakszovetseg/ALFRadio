@@ -1,13 +1,14 @@
 #include "Settings.h"
 #include <fstream>
 #include "Elements/Notification.h"
+#include "RandomList.h"
 
 ng::json Settings::jsonFile_;
 unsigned Settings::numberOfFiles_ = 0;
 
 void Settings::load()
 {
-	std::ifstream in("settings.json");
+	std::ifstream in(SETTINGS_FILE);
 
 	if (in.fail()) { // if failed to load
 		in.close();
@@ -28,6 +29,7 @@ void Settings::load()
 		jsonFile_[dimVolumeKey] = 0.2F;
 		jsonFile_[dimThresholdKey] = 0.2F;
 		jsonFile_[dimDurationKey] = 1.5F;
+		jsonFile_[randomizeFNF] = false;
 
 		// default duration of breaks
 		numberOfFiles_ = 7;
@@ -60,7 +62,7 @@ void Settings::load()
 
 void Settings::save()
 {
-	std::ofstream out("settings.json");
+	std::ofstream out(SETTINGS_FILE);
 
 	if (out.fail())
 	{
@@ -82,5 +84,15 @@ void Settings::save()
 
 		NG_LOG_INFO("Settings created/saved successfully!");
 	}
+}
+
+std::string Settings::getFilePath(int i)
+{
+	if (RandomList::isUsed()) {
+		return RandomList::getFilePath(i);
+	}
+	else
+		return INPUT_LOC + ng::Timer::getSysYMDStr() + "/" + Settings::getFileName(i);
+
 }
 

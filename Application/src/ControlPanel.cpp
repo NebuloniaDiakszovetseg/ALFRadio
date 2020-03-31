@@ -1,5 +1,6 @@
 #include "ControlPanel.h"
 #include "BassPlayer.h"
+#include "RandomList.h"
 
 void ControlPanel::setup()
 {
@@ -48,6 +49,8 @@ void ControlPanel::setup()
 		NG_LOG_WARN("Auto intro and outro disabled due to input files not found!");
 		NG_LOG_WARN("Intro Location: ", Settings::getIntroLocation());
 		NG_LOG_WARN("Outro Location: ", Settings::getOutroLocation());
+		Settings::setAutoIntroOutro(false);
+		introSwitcher_.setIsActive(false);
 		introSwitcher_.setDisabled(true);
 		introSwitcher_.setFillColor(disabledElementColor_);
 		introSwitcherText_.setFillColor(disabledElementColor_);
@@ -68,12 +71,26 @@ void ControlPanel::setup()
 	notFoundSwitcherText_.setCharacterSize(fontSize_);
 	notFoundSwitcherText_.setFillColor(fontColor_);
 
+	if (RandomList::noInput())
+	{
+		NG_LOG_WARN("Randomize if files not found disabled due to"
+		"bad or no input!");
+
+		Settings::setFNFIsEnabled(false);
+		notFoundSwitcher_.setIsActive(false);
+		notFoundSwitcher_.setDisabled(true);
+		notFoundSwitcher_.setFillColor(disabledElementColor_);
+		notFoundSwitcherText_.setFillColor(disabledElementColor_);
+	}
+	else {
+		notFoundSwitcher_.setIsActive(Settings::getFNFIsEnabled());
+	}
+
 	dimSwitcher_.setTexture(NG_TEXTURE(switcherTextureLocation_));
 	dimSwitcher_.setPosition(dimSwitcherPosition_);
 	dimSwitcher_.setFillColor(elementColor_);
 	dimSwitcher_.setMarkColor(switcherMarkColor_);
 	dimSwitcher_.setScale(ng::ftovec(switcherScale_));
-	dimSwitcher_.setIsActive(Settings::getDimIsActive());
 
 	dimSwitcherText_.setPosition(dimSwitcherTextPos_);
 	dimSwitcherText_.setString(dimSwitcherString_);
@@ -82,6 +99,7 @@ void ControlPanel::setup()
 	dimSwitcherText_.setFillColor(fontColor_);
 	dimTimer_ = Settings::getDimDuration();
 
+	// error logging handled by BassPlayer
 	if (!BassPlayer::microphoneWorks())
 	{
 		Settings::setDimIsActive(false);
@@ -90,12 +108,9 @@ void ControlPanel::setup()
 		dimSwitcher_.setFillColor(disabledElementColor_);
 		dimSwitcherText_.setFillColor(disabledElementColor_);
 	}
-
-	// TODO: Lift These up
-	notFoundSwitcher_.setDisabled(true);
-	notFoundSwitcher_.setFillColor(disabledElementColor_);
-	notFoundSwitcherText_.setFillColor(disabledElementColor_);
-	// --------------
+	else {
+		dimSwitcher_.setIsActive(Settings::getDimIsActive());
+	}
 
 	// update table based on files read/playing
 	table_.create();
@@ -123,6 +138,7 @@ void ControlPanel::update()
 {
 	Settings::setDimIsActive(dimSwitcher_.isActive());
 	Settings::setAutoIntroOutro(introSwitcher_.isActive());
+	Settings::setFNFIsEnabled(notFoundSwitcher_.isActive());
 
 	// adjust date and time display when time passes by
 	dateTime_.setString(ng::Timer::getSysString());

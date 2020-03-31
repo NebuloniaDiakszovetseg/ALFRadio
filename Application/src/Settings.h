@@ -9,6 +9,7 @@ static constexpr int VIEW_HEIGHT = 1080;
 
 // location of input files
 static constexpr auto INPUT_LOC = "input/";
+static constexpr auto SETTINGS_FILE = "settings.json";
 
 class Settings
 {
@@ -33,11 +34,14 @@ public:
 	static bool getAutoIntroOutro() { return jsonFile_[autoInOutroKey].get<bool>(); }
 	static bool getDimIsActive() { return jsonFile_[dimActiveKey].get<bool>(); }
 	static bool getConsoleIsDisabled() { return jsonFile_[consoleWindowKey][isDisabled].get<bool>(); }
+	static bool getFNFIsEnabled() { return jsonFile_[randomizeFNF].get<bool>(); }
 
 	// get the string that represents the start of break with index i (format -> hh:mm)
 	static std::string getBreakStartString(int i) { return jsonFile_[std::to_string(i)][startKey]; }
+	
 	// get the string that represents the end of break with index i (format -> hh:mm)
 	static std::string getBreakEndString(int i) { return jsonFile_[std::to_string(i)][endKey]; }
+	
 	// get the string that represents the name of file with index i
 	static std::string getFileName(int i) { return jsonFile_[std::to_string(i)][fileKey]; }
 
@@ -57,14 +61,13 @@ public:
 	}
 
 	// returns the relative path of file with index i
-	static std::string getFilePath(int i) {
-		return INPUT_LOC + ng::Timer::getSysYMDStr() + "/" + Settings::getFileName(i);
-	}
+	static std::string getFilePath(int i);
 
 	static unsigned getNumOfFiles() { return numberOfFiles_; }
 
 	static void setAutoIntroOutro(bool isActive) { jsonFile_[autoInOutroKey] = isActive; }
 	static void setDimIsActive(bool isActive) { jsonFile_[dimActiveKey] = isActive; }
+	static void setFNFIsEnabled(bool isActive) { jsonFile_[randomizeFNF] = isActive; }
 
 protected:  // accessed by settings UI
 	// variables
@@ -90,5 +93,6 @@ protected:  // accessed by settings UI
 	KEY dimThresholdKey = "dim_threshold";
 	KEY dimVolumeKey = "dim_volume";
 	KEY dimDurationKey = "dim_duration_seconds";
+	KEY randomizeFNF = "randomize_if_files_not_found";
 #undef KEY
 };

@@ -1,26 +1,29 @@
 #include "BassPlayer.h"
 #include "Elements/Notification.h"
+#include "RandomList.h"
 
 std::string BassPlayer::playingFilePath_ = "";
 bool BassPlayer::playingFilePathChanged_ = false;
 int BassPlayer::playingFileIndex_ = -1; // -1 not playing anything
-bool BassPlayer::isPlaying_ = false;
-bool BassPlayer::wasPlaying_ = true;
+
 HSTREAM BassPlayer::mainChannel_;
 bool BassPlayer::playingEnded_ = false;
+bool BassPlayer::isPlaying_ = false;
+bool BassPlayer::wasPlaying_ = true;
 
-bool BassPlayer::introLoaded_ = false;
 bool BassPlayer::introOutroIsStreaming_ = false;
-HSAMPLE BassPlayer::introSample_;
-bool BassPlayer::outroLoaded_ = false;
-HSAMPLE BassPlayer::outroSample_;
 HCHANNEL BassPlayer::introOutroChannel_;
+HSAMPLE BassPlayer::introSample_;
+bool BassPlayer::introLoaded_ = false;
+HSAMPLE BassPlayer::outroSample_;
+bool BassPlayer::outroLoaded_ = false;
+
 HRECORD BassPlayer::microphoneHandle_;
 float BassPlayer::microphoneLevel_ = 0.0F;
 int BassPlayer::microphoneDeviceNr_ = -1;
 bool BassPlayer::microphoneWorks_ = false;
 
-void BassPlayer::setPlayingFile(const int settingsIndex)
+void BassPlayer::setPlayingFileIndex(const int settingsIndex)
 {
 	if (settingsIndex > static_cast<int>(Settings::getNumOfFiles()) || settingsIndex < 0) {
 		NG_LOG_WARN("BassPlayer -> settingsIndex(", settingsIndex, ") out of bounds!");
@@ -206,17 +209,53 @@ void BassPlayer::update()
 
 		BASS_ChannelStop(mainChannel_);
 
+		// set and load file
 		playingFilePath_ = Settings::getFilePath(playingFileIndex_);
 		const void* file = playingFilePath_.c_str();
 		mainChannel_ = BASS_StreamCreateFile(FALSE, file, 0, 0, 0);
 
 		auto errorCode = BASS_ErrorGetCode();
-		if (errorCode == BASS_ERROR_FILEOPEN) {
+		if (errorCode == BASS_ERROR_FILEOPEN) // if failed to open file
+		{
 			NG_LOG_WARN("Cannot Play! - File not found!");
 		}
 		else if (errorCode == BASS_ERROR_FILEFORM) {
 			NG_LOG_WARN("Cannot Play! - File in unrecognised format!");
 			NG_LOG_WARN("Make sure files are in supported format! (mp3)");
+		}
+
+		// randomize if files not found
+		if (errorCode != BASS_OK && Settings::getFNFIsEnabled())
+		{
+			NG_LOG_INFO("Random directory will be choosen"
+				" out of ", RANDOM_LIST_FILE, " entries");
+
+			std::string randFilePath;
+			int tries = 0; // count number of times tried
+			do {
+				tries++;
+
+				RandomList::generateRandomPath();
+
+				// set and load file
+				randFilePath = RandomList::getFilePath(playingFileIndex_);
+				const void* file = randFilePath.c_str();
+				mainChannel_ = BASS_StreamCreateFile(FALSE, file, 0, 0, 0);
+
+				errorCode = BASS_ErrorGetCode(); // get current error code
+			} while (tries <= numberOfTries_ && errorCode != BASS_OK);
+			// do until you succeed or fail numberOfTries_ times
+
+			// if failed prompt user with an error message
+			if (tries == numberOfTries_) {
+				NG_LOG_WARN("Could not find a random file"
+					" with fitting description!");
+			}
+			else {
+				playingFilePath_ = randFilePath;
+				RandomList::markAsUsed();
+				NG_LOG_INFO("Path choosen: ", RandomList::getFolderPath());
+			}
 		}
 
 		// if it was playing keep playing = send a "fake" signal into play logic
@@ -319,7 +358,6 @@ void BassPlayer::update()
 		
 		BASS_ChannelPause(mainChannel_);
 	}
-
 }
 
 void BassPlayer::setVolume(const float percent)

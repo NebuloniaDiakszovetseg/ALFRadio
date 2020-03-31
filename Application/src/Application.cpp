@@ -18,6 +18,7 @@ Application::Application()
 	Notification::setup();
 
 	Settings::load();
+	RandomList::load();
 
 	if (Settings::getConsoleIsDisabled()) // hides console if set
 		ShowWindow(GetConsoleWindow(), SW_HIDE);
@@ -56,6 +57,8 @@ void Application::handleEvents()
 
 void Application::update()
 {
+	RandomList::update();
+
 	settingsUI_.update();
 	controlPanel_.update();
 	musicPlayer_.update();

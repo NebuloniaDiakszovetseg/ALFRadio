@@ -64,6 +64,7 @@ void MusicPlayer::handleEvents(const sf::Event& event)
 
 void MusicPlayer::update()
 {
+	// update time-related texts
 	totalTime_.setString(BassPlayer::getLengthString());
 	totalTime_.setPosition({
 		seekSlider_.getPosition().x + seekSlider_.getGlobalBounds().width
@@ -79,25 +80,29 @@ void MusicPlayer::update()
 		- timeTextOffset_.y
 	});
 
+	// update slider to percentage played
 	if (BassPlayer::getPercentagePlayed() <= 1.0F)
 		seekSlider_.setLevel(BassPlayer::getPercentagePlayed());
 
+	// disable switcher if playback ended
 	if (BassPlayer::playbackHasEnded())
 		playSwitcher_.setIsActive(false);
 
+	// start if start time reached
 	if (startedForTime != ng::Timer::getSysHMStr()) {
 		for (int i = 0; i < static_cast<int>(Settings::getNumOfFiles()); i++) {
 			if (ng::Timer::getSys().tm_hour == Settings::getBreakStartHour(i) &&
 				ng::Timer::getSys().tm_min == Settings::getBreakStartMinute(i))
 			{
 				startedForTime = ng::Timer::getSysHMStr();
-				BassPlayer::setPlayingFile(i);
+				BassPlayer::setPlayingFileIndex(i);
 				BassPlayer::play();
 				playSwitcher_.setIsActive(true);
 			}
 		}
 	}
 
+	// force end if end time reached
 	if (endedForTime != ng::Timer::getSysHMStr()) {
 		int index = BassPlayer::getPlayingFileIndex();
 		if (0 <= index && index < static_cast<int>(Settings::getNumOfFiles()) &&

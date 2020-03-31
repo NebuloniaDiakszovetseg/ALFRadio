@@ -4,9 +4,9 @@
     "!comment3": "If things do break delete this file and start program to reset defaults",
     "!comment4": "For more information contact me, Sz.Lori on social media :D",
     "0": {
-        "1.start": "7:25",
+        "1.start": "02:48",
         "2.end": "7:31",
-        "file": "0.szunet.mp3"
+        "file": "1.szunet.mp3"
     },
     "1": {
         "1.start": "8:20",
@@ -54,9 +54,10 @@
     "intro_location": "input/intro.mp3",
     "maximum_app_volume": 0.5,
     "outro_location": "input/outro.mp3",
+    "randomize_if_files_not_found": false,
     "render_window": {
-        "height": 576,
-        "width": 1024,
+        "height": 480,
+        "width": 800,
         "window_type": 1
     }
 }

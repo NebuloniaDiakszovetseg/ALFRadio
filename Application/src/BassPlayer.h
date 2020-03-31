@@ -16,7 +16,8 @@ public:
 	static int getPlayingFileIndex() { return playingFileIndex_; }
 
 	// gets the index in settings of the file that has to be played
-	static void setPlayingFile(const int settingsIndex);
+	static void setPlayingFileIndex(const int settingsIndex);
+
 	static void setVolume(const float percent);
 	static bool introIsLoaded() { return introLoaded_; }
 	static bool outroIsLoaded() { return outroLoaded_; }
@@ -52,15 +53,14 @@ private:
 	// converts bytes into mm:ss string format
 	static std::string bytesToStringTime(QWORD bytes);
 
-	static int playingFileIndex_;
-	static bool isPlaying_;
-	static bool wasPlaying_;
-
 	static std::string playingFilePath_;
 	static bool playingFilePathChanged_;
+	static int playingFileIndex_;
 
 	static HSTREAM mainChannel_; // Handle for open stream
 	static bool playingEnded_;
+	static bool isPlaying_;
+	static bool wasPlaying_;
 
 	static bool introOutroIsStreaming_;
 	static HCHANNEL introOutroChannel_;
@@ -74,4 +74,6 @@ private:
 	static float microphoneLevel_;
 	static int microphoneDeviceNr_;
 	static bool microphoneWorks_;
+
+	static constexpr int numberOfTries_ = 10;
 };

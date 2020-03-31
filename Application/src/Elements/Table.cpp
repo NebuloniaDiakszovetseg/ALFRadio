@@ -21,7 +21,7 @@ void Table::handleEvents(const sf::Event& event, const sf::Vector2f& mouse)
 		}
 
 		if (rowButton_[i].isActive()) {
-			BassPlayer::setPlayingFile(i);
+			BassPlayer::setPlayingFileIndex(i);
 		}
 	}
 }
@@ -80,7 +80,6 @@ void Table::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
 		target.draw(rowButton_[i]);
 	}
-	//target.draw(errorConfirmDialog_);
 }
 
 void Table::updateColors()

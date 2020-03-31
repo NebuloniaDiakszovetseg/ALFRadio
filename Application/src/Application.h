@@ -11,6 +11,7 @@
 #include "SettingsUI.h"
 #include "MusicPlayer.h"
 #include "ControlPanel.h"
+#include "RandomList.h"
 
 // app created by: Szoke Andras-Lorand
 // <add your name>
