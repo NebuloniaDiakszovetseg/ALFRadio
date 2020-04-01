@@ -214,8 +214,7 @@ void BassPlayer::update()
 
 	// resume playing main channel after intro/outro finished
 	if (isPlaying_ && introOutroIsStreaming_ &&
-		BASS_ChannelIsActive(introOutroChannel_) != BASS_ACTIVE_PLAYING &&
-		BASS_ChannelGetPosition(introOutroChannel_, BASS_POS_BYTE) == 0)
+		BASS_ChannelIsActive(introOutroChannel_) != BASS_ACTIVE_PLAYING)
 	{
 		introOutroIsStreaming_ = false;
 		BASS_ChannelStop(introOutroChannel_);
