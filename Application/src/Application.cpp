@@ -2,12 +2,12 @@
 
 Application::Application()
 {
-	NG_LOG_INFO("SFML Version: ", SFML_VERSION_MAJOR, ".",
+	NG_LOG_NOTE("SFML Version: ", SFML_VERSION_MAJOR, ".",
 		".", SFML_VERSION_MINOR, ".", SFML_VERSION_PATCH);
 
-	NG_LOG_INFO("BASS Version: ", BassPlayer::bassVersionText());
+	NG_LOG_NOTE("BASS Version: ", BassPlayer::bassVersionText());
 
-	NG_LOG_INFO("NGin Version: ", NG_VERSION_MAJOR,
+	NG_LOG_NOTE("NGin Version: ", NG_VERSION_MAJOR,
 		".", NG_VERSION_MINOR, ".", NG_VERSION_PATCH);
 
 	NG_LOG_NOTE("App by Szoke Andras-Lorand");

@@ -48,9 +48,9 @@
         "width": 800
     },
     "dim_duration_seconds": 1.5,
-    "dim_is_active": false,
-    "dim_threshold": 0.20000000298023224,
-    "dim_volume": 0.20000000298023224,
+    "dim_is_active": true,
+    "dim_threshold": 0.0752672478556633,
+    "dim_volume": 0.09969472885131836,
     "intro_location": "input/intro.mp3",
     "maximum_app_volume": 0.5,
     "outro_location": "input/outro.mp3",

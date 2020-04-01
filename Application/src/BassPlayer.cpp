@@ -52,150 +52,59 @@ void BassPlayer::next()
 	}
 }
 
-bool BassPlayer::playbackHasEnded()
-{
-	return playingEnded_;
-}
-
 std::string BassPlayer::getCurrentPositionString()
 {
-	if (introOutroIsStreaming_)
-		return bytesToStringTime(BASS_ChannelGetPosition(introOutroChannel_, BASS_POS_BYTE));
-	else
-		return bytesToStringTime(BASS_ChannelGetPosition(mainChannel_, BASS_POS_BYTE));
+	return
+		bytesToStringTime(BASS_ChannelGetPosition(activeOutputHandle(), BASS_POS_BYTE));
 }
 
 std::string BassPlayer::getLengthString()
 {
-	if (introOutroIsStreaming_)
-		return "~" + bytesToStringTime(BASS_ChannelGetLength(introOutroChannel_, BASS_POS_BYTE));
-	else
-		return "~" + bytesToStringTime(BASS_ChannelGetLength(mainChannel_, BASS_POS_BYTE));
+	return "~" + 
+		bytesToStringTime(BASS_ChannelGetLength(activeOutputHandle(), BASS_POS_BYTE));
 }
 
 void BassPlayer::setPercentagePlayed(const float percent)
 {
-	if (introOutroIsStreaming_)
-	{
-		auto length = BASS_ChannelGetLength(introOutroChannel_, BASS_POS_BYTE);
+	auto length = BASS_ChannelGetLength(activeOutputHandle(), BASS_POS_BYTE);
 
-		QWORD position = static_cast<QWORD>(length * static_cast<double>(percent));
-		BASS_ChannelSetPosition(introOutroChannel_, position, BASS_POS_BYTE);
-	}
-	else {
-		auto length = BASS_ChannelGetLength(mainChannel_, BASS_POS_BYTE);
-
-		QWORD position = static_cast<QWORD>(length * static_cast<double>(percent));
-		BASS_ChannelSetPosition(mainChannel_, position, BASS_POS_BYTE);
-	}
+	QWORD position = static_cast<QWORD>(length * static_cast<double>(percent));
+	BASS_ChannelSetPosition(activeOutputHandle(), position, BASS_POS_BYTE);
 }
 
 float BassPlayer::getPercentagePlayed()
 {
-	if (introOutroIsStreaming_)
+	// make sure the saved channel length is right
+	double length = 
+		static_cast<double>(BASS_ChannelGetLength(activeOutputHandle(), BASS_POS_BYTE));
+	double position = 
+		static_cast<double>(BASS_ChannelGetPosition(activeOutputHandle(), BASS_POS_BYTE));
+
+	if (BASS_ChannelGetLength(activeOutputHandle(), BASS_POS_BYTE) == -1 ||
+		BASS_ChannelGetPosition(activeOutputHandle(), BASS_POS_BYTE) == -1)
 	{
-		// make sure the saved channel length is right
-		double length = 
-			static_cast<double>(BASS_ChannelGetLength(introOutroChannel_, BASS_POS_BYTE));
-		double position = 
-			static_cast<double>(BASS_ChannelGetPosition(introOutroChannel_, BASS_POS_BYTE));
-
-		if (BASS_ChannelGetLength(introOutroChannel_, BASS_POS_BYTE) == -1 ||
-			BASS_ChannelGetPosition(introOutroChannel_, BASS_POS_BYTE) == -1)
-		{
-			return 0.0F;
-		}
-
-		return static_cast<float>(position / length);
+		return 0.0F;
 	}
-	else
-	{
-		// make sure the saved channel length is right
-		double length = 
-			static_cast<double>(BASS_ChannelGetLength(mainChannel_, BASS_POS_BYTE));
-		double position = 
-			static_cast<double>(BASS_ChannelGetPosition(mainChannel_, BASS_POS_BYTE));
 
-		if (BASS_ChannelGetLength(mainChannel_, BASS_POS_BYTE) == -1 ||
-			BASS_ChannelGetPosition(mainChannel_, BASS_POS_BYTE) == -1)
-		{
-			return 0.0F;
-		}
-
-		return static_cast<float>(position / length);
-	}
+	return static_cast<float>(position / length);
 }
 
 void BassPlayer::setup()
 {
-	BASS_Init(-1, 44100, BASS_DEVICE_MONO, ng::Main::getWindowHandle(), NULL);
-	if (BASS_ErrorGetCode() != BASS_OK)
-	{
-		NG_LOG_ERROR("Error! Failed to initialize sound output!");
-		NG_LOG_ERROR("BASS ERROR CODE: ", BASS_ErrorGetCode());
-		NG_LOG_NOTE("Go to audio devices in start menu and check if output device"
-			" is enabled");
+	// Include a "Default" entry in the output device list
+	// aka stick to deafult output device
+	BASS_SetConfig(
+		BASS_CONFIG_DEV_DEFAULT,
+		TRUE
+	);
 
-		Notification::popup("Error!",
-			"                  Sound output failed to initialize!\n"
-			"Please check if there is a proper audio output device!");
-
-		ng::Main::closeWindow();
-	}
-
-	introSample_ = 
-		BASS_SampleLoad(false, Settings::getIntroLocation().c_str(), 0, 0, 1, BASS_DEVICE_MONO);
-	introLoaded_ = (introSample_ != 0); // condition of loading going well
-
-	outroSample_ =
-		BASS_SampleLoad(false, Settings::getOutroLocation().c_str(), 0, 0, 1, BASS_DEVICE_MONO);
-	outroLoaded_ = (outroSample_ != 0);
-
-	// --- Initialize microphone START ------------------------------
-	microphoneDeviceNr_ = -1;
-	BASS_DEVICEINFO dinfo;
-	// find an enabled microphone
-	for (int a = 0; BASS_RecordGetDeviceInfo(a, &dinfo); a++) {
-		if ((dinfo.flags & BASS_DEVICE_ENABLED) &&
-			(dinfo.flags & BASS_DEVICE_TYPE_MASK) == BASS_DEVICE_TYPE_MICROPHONE)
-		{
-			microphoneDeviceNr_ = a;
-			break;
-		}
-	}
-
-	microphoneWorks_ = true;
-	if (microphoneDeviceNr_ >= 0) {
-		// initialize microphone recording device
-		BASS_RecordInit(microphoneDeviceNr_);
-		// create a recording channel with 10ms period
-		microphoneHandle_ = BASS_RecordStart(44100, 1, MAKELONG(0, 10), NULL, 0);
-	
-		if (BASS_ErrorGetCode() != BASS_OK)
-		{
-			microphoneWorks_ = false;
-			NG_LOG_WARN("Error initializing microphone!");
-			NG_LOG_WARN("Dim if microphone active function disabled!");
-		}
-	}
-	else {
-		microphoneWorks_ = false;
-		NG_LOG_WARN("Cannot initialize microphone! No enabled device found!");
-		NG_LOG_WARN("Dim if microphone active function disabled!");
-	}
-
-	// --- Initialize microphone END ------------------------------
+	initSpeakers();
+	loadSamples();
+	initMicrophone();
 }
 
 void BassPlayer::update()
 {
-	// TODO: TEST AND ENABLE!
-	// handle changing device
-	/*if (BASS_ErrorGetCode() == BASS_ERROR_DEVICE) {
-		BASS_SetDevice(1);
-		NG_LOG_NOTE("Output device has been changed!");
-	}*/
-
 	if(microphoneWorks_)
 		measureMicLevel();
 
@@ -209,10 +118,7 @@ void BassPlayer::update()
 
 		BASS_ChannelStop(mainChannel_);
 
-		// set and load file
-		playingFilePath_ = Settings::getFilePath(playingFileIndex_);
-		const void* file = playingFilePath_.c_str();
-		mainChannel_ = BASS_StreamCreateFile(FALSE, file, 0, 0, 0);
+		loadPlayingFile();
 
 		auto errorCode = BASS_ErrorGetCode();
 		if (errorCode == BASS_ERROR_FILEOPEN) // if failed to open file
@@ -388,6 +294,87 @@ std::string BassPlayer::bassVersionText()
 	}
 
 	return text;
+}
+
+void BassPlayer::initSpeakers()
+{
+	BASS_Init(-1, 44100, BASS_DEVICE_MONO, ng::Main::getWindowHandle(), NULL);
+	if (BASS_ErrorGetCode() != BASS_OK)
+	{
+		NG_LOG_ERROR("Error! Failed to initialize sound output!");
+		NG_LOG_ERROR("BASS ERROR CODE: ", BASS_ErrorGetCode());
+		NG_LOG_NOTE("Go to audio devices in start menu and check if output device"
+			" is enabled");
+
+		Notification::popup("Error!",
+			"                  Sound output failed to initialize!\n"
+			"Please check if there is a proper audio output device!");
+
+		ng::Main::closeWindow();
+	}
+}
+
+void BassPlayer::loadSamples()
+{
+	BASS_SampleFree(introSample_);
+	BASS_SampleFree(outroSample_);
+
+	introSample_ =
+		BASS_SampleLoad(false, Settings::getIntroLocation().c_str(), 0, 0, 1, BASS_DEVICE_MONO);
+	introLoaded_ = (introSample_ != 0); // condition of loading going well
+
+	outroSample_ =
+		BASS_SampleLoad(false, Settings::getOutroLocation().c_str(), 0, 0, 1, BASS_DEVICE_MONO);
+	outroLoaded_ = (outroSample_ != 0);
+}
+
+void BassPlayer::initMicrophone()
+{
+	microphoneDeviceNr_ = -1;
+	BASS_DEVICEINFO dinfo;
+	// find an enabled microphone
+	for (int a = 0; BASS_RecordGetDeviceInfo(a, &dinfo); a++) {
+		if ((dinfo.flags & BASS_DEVICE_ENABLED) &&
+			(dinfo.flags & BASS_DEVICE_TYPE_MASK) == BASS_DEVICE_TYPE_MICROPHONE)
+		{
+			microphoneDeviceNr_ = a;
+			break;
+		}
+	}
+
+	microphoneWorks_ = true;
+	if (microphoneDeviceNr_ >= 0) {
+		// initialize microphone recording device
+		BASS_RecordInit(microphoneDeviceNr_);
+		// create a recording channel with 10ms period
+		microphoneHandle_ = BASS_RecordStart(44100, 1, MAKELONG(0, 10), NULL, 0);
+
+		if (BASS_ErrorGetCode() != BASS_OK)
+		{
+			microphoneWorks_ = false;
+			NG_LOG_WARN("Error initializing microphone!");
+			NG_LOG_WARN("Dim if microphone active function disabled!");
+		}
+	}
+	else {
+		microphoneWorks_ = false;
+		NG_LOG_WARN("Cannot initialize microphone! No enabled device found!");
+		NG_LOG_WARN("Dim if microphone active function disabled!");
+	}
+
+}
+
+void BassPlayer::loadPlayingFile()
+{
+	if (playingFileIndex_ != -1)
+	{
+		BASS_StreamFree(mainChannel_);
+		playingFilePath_ = Settings::getFilePath(playingFileIndex_);
+		const void* file = playingFilePath_.c_str();
+		mainChannel_ = BASS_StreamCreateFile(FALSE, file, 0, 0, 0);
+	}
+	else
+		NG_LOG_WARN("Playing file not set but loaded! Unexpected behaviour might occur.");
 }
 
 void BassPlayer::streamIntro()

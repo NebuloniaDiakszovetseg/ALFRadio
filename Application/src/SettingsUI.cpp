@@ -1,6 +1,8 @@
 #include "SettingsUI.h"
 #include "BassPlayer.h"
 
+bool SettingsUI::isActive_ = false;
+
 void SettingsUI::setup()
 {
 	banner_.setTexture(&NG_TEXTURE(bannerTextureLoc_));
@@ -11,9 +13,13 @@ void SettingsUI::setup()
 	background_.setPosition(backgroundPosition_);
 	background_.setFillColor(backgroundColor_);
 
-	settingsSwitcher_.setSize(settingsSwitcherSize_);
 	settingsSwitcher_.setTexture(NG_TEXTURE(settingsTextureLoc_));
 	settingsSwitcher_.setPosition(settingsSwitcherPos_);
+	settingsSwitcher_.setSelectColor(mainElementsSelectColor_);
+
+	exitButton_.setTexture(NG_TEXTURE(exitButtonTextureLoc_));
+	exitButton_.setPosition(exitButtonPos_);
+	exitButton_.setSelectColor(mainElementsSelectColor_);
 
 	winResDropdown_.setTexture(NG_TEXTURE(dropdownTextureLoc_));
 	winResDropdown_.setFont(NG_FONT(fontTypeLocation_));
@@ -157,8 +163,22 @@ void SettingsUI::setup()
 
 void SettingsUI::handleEvents(const sf::Event& event)
 {
+	exitButton_.handleEvents(event, ng::Cursor::getPosition());
 	settingsSwitcher_.handleEvents(event, ng::Cursor::getPosition());
 	confirmDialog_.handleEvents(event, ng::Cursor::getPosition());
+
+	if (settingsSwitcher_.hasChanged()) {
+		isActive_ = settingsSwitcher_.isActive();
+		if (settingsSwitcher_.isActive())
+		{
+			settingsSwitcher_.setSelectColor(sf::Color::White);
+			exitButton_.setSelectColor(sf::Color::White);
+		}
+		else {
+			settingsSwitcher_.setSelectColor(mainElementsSelectColor_);
+			exitButton_.setSelectColor(mainElementsSelectColor_);
+		}
+	}
 
 	if (settingsSwitcher_.isActive() && !confirmDialog_.isActive())
 	{
@@ -218,6 +238,10 @@ void SettingsUI::handleEvents(const sf::Event& event)
 	}
 	else {
 		winResDropdown_.setDisabled(false);
+	}
+
+	if (exitButton_.isActive()) {
+		ng::Main::closeWindow();
 	}
 }
 
@@ -298,6 +322,7 @@ void SettingsUI::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	}
 
 	target.draw(settingsSwitcher_);
+	target.draw(exitButton_);
 	target.draw(confirmDialog_);
 }
 

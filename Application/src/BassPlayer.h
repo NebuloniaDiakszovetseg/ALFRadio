@@ -32,7 +32,7 @@ public:
 	static float getMicrophoneLevel() { return microphoneLevel_; }
 
 	// signals the end of playback to music player
-	static bool playbackHasEnded();
+	static bool playbackHasEnded() { return playingEnded_; }
 
 	// returns current position of channel in mm:ss format
 	static std::string getCurrentPositionString();
@@ -47,6 +47,19 @@ public:
 
 	static std::string bassVersionText();
 private:
+	static void initSpeakers();
+	static void loadSamples();
+	static void initMicrophone();
+
+	static void loadPlayingFile();
+
+	static DWORD activeOutputHandle() {
+		if (introOutroIsStreaming_)
+			return introOutroChannel_;
+		else
+			return mainChannel_;
+	}
+
 	static void streamIntro();
 	static void streamOutro();
 

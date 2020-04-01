@@ -9,7 +9,10 @@ public:
 	void update();
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
+	static bool isActive() { return isActive_; }
 private:
+	static bool isActive_;
+
 	// --- Background ----------------------------
 	const sf::Vector2f backgroundPosition_{ 600.0F, 0.0F };
 	const sf::Vector2f backgroundSize_
@@ -19,12 +22,22 @@ private:
 	sf::RectangleShape banner_;
 	const std::string bannerTextureLoc_ = "banner.png";
 
-	// -- Settings Switcher ----------------------
-	ng::Switcher settingsSwitcher_{ { 60.0F, 60.0F } };
-	const sf::Vector2f settingsSwitcherPos_
+	// -- Exit Button ----------------------------
+	const sf::Vector2f exitButtonSize_{ 60.0F, 60.0F };
+	const sf::Vector2f exitButtonPos_
 	{ static_cast<float>(VIEW_WIDTH) - 80.0F,  20.0F };
+	const std::string exitButtonTextureLoc_ = "exit_button.png";
+	ng::Button exitButton_{ exitButtonSize_ };
+
+	// -- Settings Switcher ----------------------
 	const sf::Vector2f settingsSwitcherSize_{ 60.0F, 60.0F };
+	const sf::Vector2f settingsSwitcherPos_
+	{ static_cast<float>(VIEW_WIDTH) - 160.0F,  20.0F };
 	const std::string settingsTextureLoc_ = "settings_switcher.png";
+	ng::Switcher settingsSwitcher_{ settingsSwitcherSize_ };
+
+	// color of settings an exit elements
+	sf::Color mainElementsSelectColor_ = sf::Color::Black;
 
 	// -- Confirm Dialog -------------------------
 	const sf::Color confirmDialogBgColor_ = { 60, 60, 60 };

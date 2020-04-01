@@ -20,7 +20,9 @@ private:
 
 	// --- Information Screen ---------
 	sf::Sprite infoScreen_;
+	sf::Sprite settingsInfoScreen_;
 	const std::string infoScreenTextureLoc_ = "info_screen.png";
+	const std::string settingsInfoScreenTextureLoc_ = "info_screen_settings.png";
 
 	sf::RectangleShape infoHoverOn_;
 	const sf::Vector2f infoSize_{ 125.0F, 125.0F };

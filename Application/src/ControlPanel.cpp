@@ -1,6 +1,7 @@
 #include "ControlPanel.h"
 #include "BassPlayer.h"
 #include "RandomList.h"
+#include "SettingsUI.h"
 
 void ControlPanel::setup()
 {
@@ -17,6 +18,7 @@ void ControlPanel::setup()
 	infoHoverOn_.setSize(infoSize_);
 	infoHoverOn_.setPosition(infoPosition_);
 	infoScreen_.setTexture(NG_TEXTURE(infoScreenTextureLoc_));
+	settingsInfoScreen_.setTexture(NG_TEXTURE(settingsInfoScreenTextureLoc_));
 	infoToggle_ = false;
 
 	volumeSlider_.setTexture(NG_TEXTURE(volumeSliderLoc_));
@@ -124,7 +126,8 @@ void ControlPanel::handleEvents(const sf::Event& event)
 	dimSwitcher_.handleEvents(event, ng::Cursor::getPosition());
 	table_.handleEvents(event, ng::Cursor::getPosition());
 
-	if (infoHoverOn_.getGlobalBounds().contains(ng::Cursor::getPosition())) {
+	if (infoHoverOn_.getGlobalBounds().contains(ng::Cursor::getPosition()))
+	{
 		infoHoverOn_.setTexture(&NG_TEXTURE(infoTexture2Location_));
 		infoToggle_ = true;
 	}
@@ -154,7 +157,7 @@ void ControlPanel::update()
 		{
 			dimTimer_ = 0.0F;
 			if (volumeBackup_ == -1) volumeBackup_ = volumeSlider_.getLevel();
-			volumeSlider_.setLevel(Settings::getDimVolume());
+			volumeSlider_.setLevel(volumeBackup_ * Settings::getDimVolume());
 		}
 
 		dimTimer_ += ng::Timer::getDeltaTime();
@@ -203,6 +206,9 @@ void ControlPanel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 	if (infoToggle_) {
 		target.draw(infoScreen_);
+		if (SettingsUI::isActive()) {
+			target.draw(settingsInfoScreen_);
+		}
 	}
 
 	target.draw(infoHoverOn_);
