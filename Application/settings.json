@@ -4,60 +4,55 @@
     "!comment3": "If things do break delete this file and start program to reset defaults",
     "!comment4": "For more information contact me, Sz.Lori on social media :D",
     "0": {
-        "1.start": "02:48",
-        "2.end": "7:31",
-        "file": "1.szunet.mp3"
-    },
-    "1": {
         "1.start": "8:20",
         "2.end": "8:32",
         "file": "1.szunet.mp3"
     },
-    "2": {
+    "1": {
         "1.start": "9:20",
         "2.end": "9:32",
         "file": "2.szunet.mp3"
     },
-    "3": {
+    "2": {
         "1.start": "10:20",
         "2.end": "10:32",
         "file": "3.szunet.mp3"
     },
-    "4": {
+    "3": {
         "1.start": "11:20",
         "2.end": "11:42",
         "file": "4.szunet.mp3"
     },
-    "5": {
+    "4": {
         "1.start": "12:30",
         "2.end": "12:42",
         "file": "5.szunet.mp3"
     },
-    "6": {
+    "5": {
         "1.start": "13:30",
         "2.end": "13:42",
         "file": "6.szunet.mp3"
     },
-    "7": {
+    "6": {
         "1.start": null
     },
     "auto_intro_and_outro": false,
     "console_window": {
         "height": 480,
-        "is_disabled": false,
+        "is_disabled": true,
         "width": 800
     },
     "dim_duration_seconds": 1.5,
-    "dim_is_active": true,
-    "dim_threshold": 0.0752672478556633,
-    "dim_volume": 0.09969472885131836,
+    "dim_is_active": false,
+    "dim_threshold": 0.20000000298023224,
+    "dim_volume": 0.20000000298023224,
     "intro_location": "input/intro.mp3",
     "maximum_app_volume": 0.5,
     "outro_location": "input/outro.mp3",
     "randomize_if_files_not_found": false,
     "render_window": {
-        "height": 480,
-        "width": 800,
+        "height": 576,
+        "width": 1024,
         "window_type": 1
     }
 }
