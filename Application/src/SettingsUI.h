@@ -141,7 +141,7 @@ private:
 	const std::string dropdownTextureLoc_ = "dropdown.png";
 	const sf::Vector2f dropdownScale_ = { ng::ftovec(1.3F) };
 
-	const sf::Color disabledElementColor_{ 0, 0, 0 };
+	const sf::Color disabledElementColor_{ 20, 20, 20 };
 
 	float resetTimer_ = 0.0F;
 	const float resetLimit_ = 10.0F;

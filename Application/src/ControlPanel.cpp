@@ -51,10 +51,8 @@ void ControlPanel::setup()
 		NG_LOG_WARN("Auto intro and outro disabled due to input files not found!");
 		NG_LOG_WARN("Intro Location: ", Settings::getIntroLocation());
 		NG_LOG_WARN("Outro Location: ", Settings::getOutroLocation());
-		Settings::setAutoIntroOutro(false);
-		introSwitcher_.setIsActive(false);
 		introSwitcher_.setDisabled(true);
-		introSwitcher_.setFillColor(disabledElementColor_);
+		introSwitcher_.setButtonColor(disabledElementColor_);
 		introSwitcherText_.setFillColor(disabledElementColor_);
 	}
 	else {
@@ -63,7 +61,7 @@ void ControlPanel::setup()
 
 	notFoundSwitcher_.setTexture(NG_TEXTURE(switcherTextureLocation_));
 	notFoundSwitcher_.setPosition(notFoundSwitcherPosition_);
-	notFoundSwitcher_.setFillColor(elementColor_);
+	notFoundSwitcher_.setButtonColor(elementColor_);
 	notFoundSwitcher_.setMarkColor(switcherMarkColor_);
 	notFoundSwitcher_.setScale(ng::ftovec(switcherScale_));
 
@@ -78,10 +76,8 @@ void ControlPanel::setup()
 		NG_LOG_WARN("Randomize if files not found disabled due to"
 		"bad or no input!");
 
-		Settings::setFNFIsEnabled(false);
-		notFoundSwitcher_.setIsActive(false);
 		notFoundSwitcher_.setDisabled(true);
-		notFoundSwitcher_.setFillColor(disabledElementColor_);
+		notFoundSwitcher_.setButtonColor(disabledElementColor_);
 		notFoundSwitcherText_.setFillColor(disabledElementColor_);
 	}
 	else {
@@ -90,9 +86,9 @@ void ControlPanel::setup()
 
 	dimSwitcher_.setTexture(NG_TEXTURE(switcherTextureLocation_));
 	dimSwitcher_.setPosition(dimSwitcherPosition_);
-	dimSwitcher_.setFillColor(elementColor_);
 	dimSwitcher_.setMarkColor(switcherMarkColor_);
 	dimSwitcher_.setScale(ng::ftovec(switcherScale_));
+	dimSwitcher_.setIsActive(Settings::getDimIsActive());
 
 	dimSwitcherText_.setPosition(dimSwitcherTextPos_);
 	dimSwitcherText_.setString(dimSwitcherString_);
@@ -100,19 +96,6 @@ void ControlPanel::setup()
 	dimSwitcherText_.setCharacterSize(fontSize_);
 	dimSwitcherText_.setFillColor(fontColor_);
 	dimTimer_ = Settings::getDimDuration();
-
-	// error logging handled by BassPlayer
-	if (!BassPlayer::microphoneWorks())
-	{
-		Settings::setDimIsActive(false);
-		dimSwitcher_.setIsActive(false);
-		dimSwitcher_.setDisabled(true);
-		dimSwitcher_.setFillColor(disabledElementColor_);
-		dimSwitcherText_.setFillColor(disabledElementColor_);
-	}
-	else {
-		dimSwitcher_.setIsActive(Settings::getDimIsActive());
-	}
 
 	// update table based on files read/playing
 	table_.create();
@@ -149,6 +132,18 @@ void ControlPanel::update()
 	// update table colors to fit reality
 	table_.updateColors();
 
+	// error logging handled by BassPlayer
+	if (!BassPlayer::microphoneWorks())
+	{
+		dimSwitcher_.setDisabled(true);
+		dimSwitcher_.setButtonColor(disabledElementColor_);
+		dimSwitcherText_.setFillColor(disabledElementColor_);
+	}
+	else {
+		dimSwitcher_.setDisabled(false);
+		dimSwitcher_.setButtonColor(elementColor_);
+		dimSwitcherText_.setFillColor(fontColor_);
+	}
 	// if dimming enabled
 	if (Settings::getDimIsActive() && BassPlayer::microphoneWorks())
 	{
@@ -158,12 +153,14 @@ void ControlPanel::update()
 			dimTimer_ = 0.0F;
 			if (volumeBackup_ == -1) volumeBackup_ = volumeSlider_.getLevel();
 			volumeSlider_.setLevel(volumeBackup_ * Settings::getDimVolume());
+			volumeSlider_.setDisabled(true);
 		}
 
 		dimTimer_ += ng::Timer::getDeltaTime();
 		if (dimTimer_ > Settings::getDimDuration() && volumeBackup_ != -1)
 		{
 			volumeSlider_.setLevel(volumeBackup_);
+			volumeSlider_.setDisabled(false);
 			volumeBackup_ = -1;
 			dimTimer_ = 0.0F;
 		}
@@ -171,6 +168,7 @@ void ControlPanel::update()
 	// restore volume after dim deactivated
 	else if (volumeBackup_ != -1) {
 		volumeSlider_.setLevel(volumeBackup_);
+		volumeSlider_.setDisabled(false);
 		volumeBackup_ = -1;
 	}
 

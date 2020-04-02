@@ -83,5 +83,5 @@ private:
 	const std::string switcherTextureLocation_ = "switcher.png";
 	const sf::Color switcherMarkColor_{ 0, 0, 0 };
 	const sf::Color elementColor_{ 250, 130, 52 };
-	const sf::Color disabledElementColor_{ 0, 0, 0 };
+	const sf::Color disabledElementColor_{ 20, 20, 20 };
 };

@@ -247,6 +247,7 @@ void SettingsUI::handleEvents(const sf::Event& event)
 
 void SettingsUI::update()
 {
+	// confirm dialog
 	if (confirmDialog_.isActive()) {
 		resetTimer_ += ng::Timer::getDeltaTime();
 

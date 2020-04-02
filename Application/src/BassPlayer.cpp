@@ -20,7 +20,7 @@ bool BassPlayer::outroLoaded_ = false;
 
 HRECORD BassPlayer::microphoneHandle_;
 float BassPlayer::microphoneLevel_ = 0.0F;
-int BassPlayer::microphoneDeviceNr_ = -1;
+int BassPlayer::microphoneDeviceNr_ = -2;
 bool BassPlayer::microphoneWorks_ = false;
 
 void BassPlayer::setPlayingFileIndex(const int settingsIndex)
@@ -100,13 +100,26 @@ void BassPlayer::setup()
 
 	initSpeakers();
 	loadSamples();
+
 	initMicrophone();
 }
 
 void BassPlayer::update()
 {
-	if(microphoneWorks_)
+	// check if microphone works
+	BASS_DEVICEINFO micInfo;
+	bool success = BASS_RecordGetDeviceInfo(microphoneDeviceNr_, &micInfo);
+	if (!((micInfo.flags & BASS_DEVICE_ENABLED) &&
+		(micInfo.flags & BASS_DEVICE_TYPE_MASK) == BASS_DEVICE_TYPE_MICROPHONE)
+		|| !success)
+	{
+		microphoneWorks_ = false;
+	}
+
+	if (microphoneWorks_)
 		measureMicLevel();
+	else
+		initMicrophone(); // try to reinitialize
 
 	// Load File
 	if (playingFilePathChanged_)
@@ -311,6 +324,9 @@ void BassPlayer::initSpeakers()
 
 		ng::Main::closeWindow();
 	}
+	else {
+		NG_LOG_INFO("Speakers successfuly initialized!");
+	}
 }
 
 void BassPlayer::loadSamples()
@@ -329,6 +345,8 @@ void BassPlayer::loadSamples()
 
 void BassPlayer::initMicrophone()
 {
+	const int micDevBefore = microphoneDeviceNr_;
+
 	microphoneDeviceNr_ = -1;
 	BASS_DEVICEINFO dinfo;
 	// find an enabled microphone
@@ -341,26 +359,35 @@ void BassPlayer::initMicrophone()
 		}
 	}
 
-	microphoneWorks_ = true;
 	if (microphoneDeviceNr_ >= 0) {
 		// initialize microphone recording device
 		BASS_RecordInit(microphoneDeviceNr_);
 		// create a recording channel with 10ms period
 		microphoneHandle_ = BASS_RecordStart(44100, 1, MAKELONG(0, 10), NULL, 0);
 
-		if (BASS_ErrorGetCode() != BASS_OK)
+		int errorCode = BASS_ErrorGetCode();
+		if (errorCode != BASS_OK)
 		{
 			microphoneWorks_ = false;
-			NG_LOG_WARN("Error initializing microphone!");
-			NG_LOG_WARN("Dim if microphone active function disabled!");
+			if (micDevBefore != microphoneDeviceNr_)
+			{ // only log "first" error
+				NG_LOG_WARN("Error initializing microphone! CODE: ", errorCode);
+				NG_LOG_WARN("Dim if microphone active function disabled!");
+			}
+		}
+		else {
+			microphoneWorks_ = true;
+			NG_LOG_INFO("Microphone (re)initialized to default device!");
 		}
 	}
 	else {
 		microphoneWorks_ = false;
-		NG_LOG_WARN("Cannot initialize microphone! No enabled device found!");
-		NG_LOG_WARN("Dim if microphone active function disabled!");
+		if (micDevBefore != -1) {
+			NG_LOG_WARN("Cannot initialize microphone! No enabled device found!"
+				" Device Number: ", microphoneDeviceNr_);
+			NG_LOG_WARN("Dim if microphone active function disabled!");
+		}
 	}
-
 }
 
 void BassPlayer::loadPlayingFile()
