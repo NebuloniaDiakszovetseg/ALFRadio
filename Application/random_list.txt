@@ -3,5 +3,4 @@
 // Make sure to add slashes properly!
 // Add each path to a new line!
 
-input/2019.07.17/
-input/2019.07.18/
+input/2020.06.11/
