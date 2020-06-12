@@ -29,6 +29,7 @@ namespace ng {
 		void setIsActive(const bool active);
 		void setDisabled(const bool isDisabled);
 
+		bool isDisabled() const { return button_.isDisabled(); }
 		bool isActive() const { return isActive_; }
 		bool hasChanged() const { return hasChanged_; }
 		sf::Vector2f getSize() const { return button_.getSize(); }

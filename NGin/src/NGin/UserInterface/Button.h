@@ -53,6 +53,7 @@ namespace ng
 		sf::Vector2f getPosition() const { return shape_.getPosition(); }
 		sf::Vector2f getSize() const { return shape_.getSize(); }
 		sf::FloatRect getGlobalBounds() const { return shape_.getGlobalBounds(); }
+		bool isDisabled() const { return isDisabled_; }
 		bool isPressed() const { return isPressed_; }
 		bool isActive() const { return isActive_; }
 	private:

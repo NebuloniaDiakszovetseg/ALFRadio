@@ -87,6 +87,7 @@ void ControlPanel::setup()
 	dimSwitcher_.setTexture(NG_TEXTURE(switcherTextureLocation_));
 	dimSwitcher_.setPosition(dimSwitcherPosition_);
 	dimSwitcher_.setMarkColor(switcherMarkColor_);
+	dimSwitcher_.setButtonColor(elementColor_);
 	dimSwitcher_.setScale(ng::ftovec(switcherScale_));
 	dimSwitcher_.setIsActive(Settings::getDimIsActive());
 
@@ -133,17 +134,18 @@ void ControlPanel::update()
 	table_.updateColors();
 
 	// error logging handled by BassPlayer
-	if (!BassPlayer::microphoneWorks())
+	if(BassPlayer::microphoneWorks() && dimSwitcher_.isDisabled())
 	{
-		dimSwitcher_.setDisabled(true);
-		dimSwitcher_.setButtonColor(disabledElementColor_);
-		dimSwitcherText_.setFillColor(disabledElementColor_);
-	}
-	else {
 		dimSwitcher_.setDisabled(false);
 		dimSwitcher_.setButtonColor(elementColor_);
 		dimSwitcherText_.setFillColor(fontColor_);
 	}
+	else if(!BassPlayer::microphoneWorks() && !dimSwitcher_.isDisabled()) {
+		dimSwitcher_.setDisabled(true);
+		dimSwitcher_.setButtonColor(disabledElementColor_);
+		dimSwitcherText_.setFillColor(disabledElementColor_);
+	}
+
 	// if dimming enabled
 	if (Settings::getDimIsActive() && BassPlayer::microphoneWorks())
 	{
